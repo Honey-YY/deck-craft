@@ -210,9 +210,10 @@ em.hl { font-style: normal; color: var(--accent); }
 .cards[data-n="3"] .grid { grid-template-columns: repeat(3, 1fr); }
 .cards[data-n="4"] .grid { grid-template-columns: repeat(4, 1fr); }
 .cards[data-n="6"] .grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); }
-.cards .c { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 40px 36px; min-height: 300px; position: relative; overflow: hidden; }
-.cards .c::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 5px; background: var(--accent); opacity: .85; }
-.cards .c .ico { width: 58px; height: 58px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 15%, transparent); display: grid; place-items: center; font-size: 26px; font-weight: 900; color: var(--accent); margin-bottom: 26px; font-family: var(--mono); }
+  /* 无卡片框。靠上方的细线与留白分组 —— 圆角卡+彩条是 AI 生成页的通病 */
+.cards .c { padding: 34px 0 0; min-height: 300px; position: relative; }
+.cards .c::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 1px; background: var(--line); }
+.cards .c .ico { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 26px; }
 .cards .c .h { font-size: 32px; font-weight: 700; color: var(--fg); margin-bottom: 14px; letter-spacing: -.3px; }
 .cards .c p { font-size: 22px; line-height: 1.6; color: var(--muted); }
 
@@ -317,8 +318,9 @@ em.hl { font-style: normal; color: var(--accent); }
    13 · process 流程
    ========================================================================== */
 .process .flow { position: absolute; left: 96px; top: 340px; width: 1728px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 34px; z-index: 10; }
-.process .step { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 40px 32px; position: relative; min-height: 330px; }
-.process .step .n { font-family: var(--mono); font-size: 22px; color: var(--accent); letter-spacing: 3px; margin-bottom: 24px; font-weight: 800; }
+.process .step { padding: 34px 0 0; position: relative; min-height: 330px; }
+.process .step::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 1px; background: var(--line); }
+.process .step .n { font-family: var(--mono); font-size: 22px; color: var(--accent); letter-spacing: 3px; margin-bottom: 24px; font-weight: 700; }
 .process .step .h { font-size: 30px; font-weight: 700; color: var(--fg); margin-bottom: 14px; }
 .process .step p { font-size: 21px; line-height: 1.6; color: var(--muted); }
 .process .step::after { content: ""; position: absolute; right: -26px; top: 50%; width: 18px; height: 2px; background: var(--accent); opacity: .6; }

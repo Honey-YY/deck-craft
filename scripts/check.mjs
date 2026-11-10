@@ -11,7 +11,12 @@ import path from 'node:path';
 
 const LAYOUTS = ['cover', 'agenda', 'section', 'bullets', 'columns', 'cards',
   'stat', 'chart', 'timeline', 'quote', 'table', 'image', 'process', 'end'];
-const THEMES = ['violet', 'obsidian', 'aurora', 'paper', 'fjord', 'moss', 'clay', 'ink', 'nebula', 'graphite'];
+const THEMES = ['paper', 'ink', 'slate', 'night', 'clay', 'moss', 'iris'];
+// 已下线的主题：同一审美换色版，用它们会落进「AI 默认配色」
+const RETIRED = {
+  violet: 'paper', obsidian: 'night', aurora: 'slate', fjord: 'slate',
+  nebula: 'iris', graphite: 'slate',
+};
 const SPECIAL_SINGLE = ['cover', 'end'];   // 只应出现一次、可以没有标题的版式
 const NO_TITLE = ['cover', 'section', 'quote', 'end', 'image']; // 标题可能不是 h1/h2 的版式
 
@@ -41,6 +46,7 @@ html = html.replace(/^\uFEFF/, '');
 // --- 1. 主题 ---------------------------------------------------------------
 const themeM = html.match(/<html[^>]*data-theme="([^"]+)"/);
 if (!themeM) err('缺 <html data-theme="...">，整份稿子会没有配色');
+else if (RETIRED[themeM[1]]) err(`主题 "${themeM[1]}" 已下线，改用 "${RETIRED[themeM[1]]}"。旧主题是同一审美换色，用它们容易落进 AI 默认配色`);
 else if (!THEMES.includes(themeM[1])) err(`主题 "${themeM[1]}" 不存在。可用：${THEMES.join(', ')}`);
 else ok.push(`主题 ${themeM[1]}`);
 
@@ -85,10 +91,9 @@ slides.forEach((s, idx) => {
 
   if (s.cls.includes('on')) onCount++;
 
-  // 页码
+  // 页码：不检查「有没有」，只检查「别塞进页面」——见后面的反 AI 味段
   const footM = s.body.match(/<div class="(?:slide-foot|pageno)"[^>]*>([\s\S]*?)<\/div>/);
-  if (!footM) warn(`${tag}（${s.layout}）：缺页码（pageno / slide-foot）`);
-  else if (!/\d/.test(strip(footM[1]))) warn(`${tag}（${s.layout}）：页脚里没有页码`);
+  if (footM && !/\d/.test(strip(footM[1]))) warn(`${tag}（${s.layout}）：页脚里没有页码，删掉这个空容器`);
 
   // 标题
   const titleM = s.body.match(/<(h1|h2|h3|blockquote)\b[^>]*>([\s\S]*?)<\/\1>/);
@@ -136,6 +141,32 @@ for (const l of SPECIAL_SINGLE) {
 for (let i = 2; i < slides.length; i++) {
   const a = slides[i - 2].layout, b = slides[i - 1].layout, c = slides[i].layout;
   if (a && a === b && b === c) warn(`第 ${i - 1}–${i + 1} 页连续三页都是 ${a}，节奏会塌`);
+}
+
+// --- 反 AI 味检查（规则见 references/anti-slop.md）-------------------------
+const countOf = re => slides.filter(s => re.test(s.raw)).length;
+
+const topbarN = countOf(/class="topbar"/);
+if (topbarN >= 3) warn(`${topbarN} 页用了同一套顶条装饰。每页同款额头是最明显的 AI 指纹，砍到 0–1 页`);
+
+const eyebrowN = countOf(/class="eyebrow"/);
+if (eyebrowN >= 3) warn(`${eyebrowN} 页用了「编号 + 短横 + 全大写英文」抬头。这套组合是默认审美，只在必要页出现`);
+
+const pagenoN = countOf(/class="(?:pageno|slide-foot)"/);
+if (pagenoN > 0) warn(`有 ${pagenoN} 页把页码写进了页面。页码归放映器管，页面自带会和进度条打架`);
+
+if (/linear-gradient\(135deg,\s*#3b2af9/i.test(markup)) err('用了「激进蓝紫渐变」万能公式，换掉');
+if (/radial-gradient\([^)]*rgba\(\s*(?:119,\s*51,\s*248|158,\s*87,\s*250)/i.test(markup)) warn('用了通用紫色霓虹 glow。深色可以留，但要能说出为什么是这个色');
+
+const emojiN = (markup.match(/[\u{1F300}-\u{1FAFF}\u{2728}\u{2B50}\u{2705}\u{274C}]/gu) || []).length;
+if (emojiN) warn(`页面里有 ${emojiN} 个 emoji。换成几何符号、编号或纯文字`);
+
+const radiusN = countOf(/border-radius:\s*(?:1[2-9]|[2-9][0-9])px/);
+if (radiusN >= 3) warn(`有 ${radiusN} 处大圆角容器。圆角卡片方阵是仪表盘套路，考虑改成细线分组`);
+
+// 色彩论证：主题必须能说清来源
+if (themeM && (themeM[1] === 'iris') && !/为什么|取自|论证|chroma/i.test(html)) {
+  warn('用了 iris（靛紫）。紫色是最高频的默认选择，请在交付说明里写一句「为什么是这个色」');
 }
 
 // 占位符残留
