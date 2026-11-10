@@ -1,0 +1,334 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="960" viewBox="0 0 1280 960" font-family="PingFang SC, Microsoft YaHei, system-ui, sans-serif">
+  <rect width="1280" height="960" fill="#0e0c14"/>
+
+  <text x="40" y="52" fill="#f4f1fa" font-size="26" font-weight="700" letter-spacing="-.5">14 种版式</text>
+  <text x="40" y="80" fill="#7d7592" font-size="14">全部按 1280 × 720 写死尺寸，外层 scale 适配任意屏幕</text>
+  <text x="1240" y="52" fill="#9e57fa" font-size="13" text-anchor="end" letter-spacing="2">DECK CRAFT</text>
+
+  <!-- ============ 1 cover ============ -->
+  <g transform="translate(40,110)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="0" y="0" width="5" height="52" fill="#9e57fa"/>
+    <circle cx="150" cy="30" r="70" fill="#7733f8" opacity=".13"/>
+    <rect x="24" y="112" width="86" height="9" rx="2" fill="#9e57fa"/>
+    <rect x="24" y="130" width="176" height="13" rx="2" fill="#e8e4f2"/>
+    <rect x="24" y="149" width="120" height="13" rx="2" fill="#e8e4f2"/>
+    <rect x="24" y="170" width="64" height="7" rx="2" fill="#4b4463"/>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">COVER</text>
+  </g>
+
+  <!-- ============ 2 agenda ============ -->
+  <g transform="translate(346,110)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="22" width="70" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="40" width="120" height="11" rx="2" fill="#d8d2e8"/>
+    <g fill="#4b4463">
+      <rect x="20" y="70" width="250" height="1"/>
+      <rect x="20" y="98" width="250" height="1"/>
+      <rect x="20" y="126" width="250" height="1"/>
+      <rect x="20" y="154" width="250" height="1"/>
+    </g>
+    <g fill="#9e57fa" font-size="9">
+      <text x="20" y="88">01</text><text x="20" y="116">02</text><text x="20" y="144">03</text><text x="20" y="172">04</text>
+    </g>
+    <g fill="#cfc8de">
+      <rect x="46" y="80" width="120" height="8" rx="2"/>
+      <rect x="46" y="108" width="96" height="8" rx="2"/>
+      <rect x="46" y="136" width="134" height="8" rx="2"/>
+      <rect x="46" y="164" width="108" height="8" rx="2"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1" opacity="0">AGENDA</text>
+  </g>
+
+  <!-- ============ 3 section ============ -->
+  <g transform="translate(652,110)">
+    <rect width="290" height="190" rx="10" fill="#221830" stroke="#2b2638"/>
+    <text x="20" y="86" fill="none" stroke="#9e57fa" stroke-width="1.5" font-size="62" font-weight="700" opacity=".55">01</text>
+    <rect x="20" y="104" width="170" height="14" rx="2" fill="#e8e4f2"/>
+    <rect x="20" y="132" width="220" height="8" rx="2" fill="#5b5374"/>
+    <rect x="20" y="148" width="150" height="8" rx="2" fill="#5b5374"/>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">SECTION</text>
+  </g>
+
+  <!-- ============ 4 bullets ============ -->
+  <g transform="translate(958,110)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="56" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="150" height="12" rx="2" fill="#e8e4f2"/>
+    <g>
+      <rect x="20" y="70" width="8" height="8" rx="1.5" fill="#9e57fa" transform="rotate(45 24 74)"/>
+      <rect x="40" y="66" width="96" height="8" rx="2" fill="#cfc8de"/>
+      <rect x="40" y="80" width="210" height="6" rx="2" fill="#4b4463"/>
+      <rect x="20" y="108" width="8" height="8" rx="1.5" fill="#9e57fa" transform="rotate(45 24 112)"/>
+      <rect x="40" y="104" width="122" height="8" rx="2" fill="#cfc8de"/>
+      <rect x="40" y="118" width="180" height="6" rx="2" fill="#4b4463"/>
+      <rect x="20" y="146" width="8" height="8" rx="1.5" fill="#9e57fa" transform="rotate(45 24 150)"/>
+      <rect x="40" y="142" width="84" height="8" rx="2" fill="#cfc8de"/>
+      <rect x="40" y="156" width="196" height="6" rx="2" fill="#4b4463"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">BULLETS</text>
+  </g>
+
+  <!-- ============ 5 columns ============ -->
+  <g transform="translate(40,316)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="64" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="164" height="12" rx="2" fill="#e8e4f2"/>
+    <rect x="20" y="70" width="48" height="7" rx="2" fill="#9e57fa"/>
+    <rect x="158" y="70" width="48" height="7" rx="2" fill="#9e57fa"/>
+    <g fill="#4b4463">
+      <rect x="20" y="88" width="112" height="7" rx="2"/><rect x="20" y="104" width="96" height="7" rx="2"/>
+      <rect x="20" y="120" width="104" height="7" rx="2"/><rect x="20" y="136" width="82" height="7" rx="2"/>
+      <rect x="158" y="88" width="112" height="7" rx="2"/><rect x="158" y="104" width="90" height="7" rx="2"/>
+      <rect x="158" y="120" width="110" height="7" rx="2"/><rect x="158" y="136" width="76" height="7" rx="2"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">COLUMNS</text>
+  </g>
+
+  <!-- ============ 6 cards ============ -->
+  <g transform="translate(346,316)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="52" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="180" height="12" rx="2" fill="#e8e4f2"/>
+    <g>
+      <rect x="20" y="70" width="80" height="92" rx="8" fill="#221e2e" stroke="#2b2638"/>
+      <rect x="32" y="82" width="18" height="18" rx="5" fill="#3a2f56"/>
+      <rect x="32" y="110" width="50" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="32" y="126" width="56" height="5" rx="2" fill="#4b4463"/>
+      <rect x="32" y="138" width="44" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <g>
+      <rect x="108" y="70" width="80" height="92" rx="8" fill="#221e2e" stroke="#2b2638"/>
+      <rect x="120" y="82" width="18" height="18" rx="5" fill="#3a2f56"/>
+      <rect x="120" y="110" width="42" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="120" y="126" width="56" height="5" rx="2" fill="#4b4463"/>
+      <rect x="120" y="138" width="38" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <g>
+      <rect x="196" y="70" width="80" height="92" rx="8" fill="#221e2e" stroke="#2b2638"/>
+      <rect x="208" y="82" width="18" height="18" rx="5" fill="#3a2f56"/>
+      <rect x="208" y="110" width="54" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="208" y="126" width="48" height="5" rx="2" fill="#4b4463"/>
+      <rect x="208" y="138" width="52" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">CARDS</text>
+  </g>
+
+  <!-- ============ 7 stat ============ -->
+  <g transform="translate(652,316)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="44" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="140" height="12" rx="2" fill="#e8e4f2"/>
+    <g>
+      <rect x="20" y="70" width="2" height="86" fill="#9e57fa"/>
+      <text x="32" y="112" fill="#f4f1fa" font-size="34" font-weight="700" font-family="DIN Alternate, monospace">1</text>
+      <rect x="32" y="126" width="56" height="5" rx="2" fill="#4b4463"/>
+      <rect x="32" y="138" width="42" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <g>
+      <rect x="116" y="70" width="2" height="86" fill="#3a3550"/>
+      <text x="128" y="112" fill="#f4f1fa" font-size="34" font-weight="700" font-family="DIN Alternate, monospace">3</text>
+      <rect x="128" y="126" width="56" height="5" rx="2" fill="#4b4463"/>
+      <rect x="128" y="138" width="38" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <g>
+      <rect x="212" y="70" width="2" height="86" fill="#3a3550"/>
+      <text x="224" y="112" fill="#f4f1fa" font-size="34" font-weight="700" font-family="DIN Alternate, monospace">40</text>
+      <rect x="224" y="126" width="46" height="5" rx="2" fill="#4b4463"/>
+      <rect x="224" y="138" width="52" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">STAT</text>
+  </g>
+
+  <!-- ============ 8 chart ============ -->
+  <g transform="translate(958,316)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="40" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="196" height="12" rx="2" fill="#e8e4f2"/>
+    <rect x="20" y="150" width="170" height="1" fill="#4b4463"/>
+    <g>
+      <rect x="24" y="118" width="28" height="32" rx="3" fill="#2f2a40"/>
+      <rect x="64" y="96" width="28" height="54" rx="3" fill="#2f2a40"/>
+      <rect x="104" y="78" width="28" height="72" rx="3" fill="#9e57fa" opacity=".85"/>
+      <rect x="144" y="68" width="28" height="82" rx="3" fill="#9e57fa"/>
+    </g>
+    <g fill="#5b5374">
+      <rect x="200" y="76" width="8" height="8" rx="1.5" fill="#9e57fa"/>
+      <rect x="216" y="78" width="52" height="5" rx="2"/>
+      <rect x="200" y="94" width="8" height="8" rx="1.5"/>
+      <rect x="216" y="96" width="44" height="5" rx="2"/>
+      <rect x="200" y="112" width="8" height="8" rx="1.5"/>
+      <rect x="216" y="114" width="48" height="5" rx="2"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">CHART</text>
+  </g>
+
+  <!-- ============ 9 timeline ============ -->
+  <g transform="translate(40,522)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="46" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="152" height="12" rx="2" fill="#e8e4f2"/>
+    <rect x="20" y="96" width="250" height="1" fill="#4b4463"/>
+    <g>
+      <circle cx="24" cy="96" r="4.5" fill="#1a1724" stroke="#9e57fa" stroke-width="2"/>
+      <rect x="18" y="68" width="22" height="5" rx="2" fill="#9e57fa"/>
+      <rect x="18" y="110" width="46" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="18" y="124" width="52" height="5" rx="2" fill="#4b4463"/>
+      <rect x="18" y="136" width="40" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <g>
+      <circle cx="90" cy="96" r="4.5" fill="#1a1724" stroke="#9e57fa" stroke-width="2"/>
+      <rect x="84" y="68" width="22" height="5" rx="2" fill="#9e57fa"/>
+      <rect x="84" y="110" width="52" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="84" y="124" width="44" height="5" rx="2" fill="#4b4463"/>
+      <rect x="84" y="136" width="48" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <g>
+      <circle cx="156" cy="96" r="4.5" fill="#1a1724" stroke="#9e57fa" stroke-width="2"/>
+      <rect x="150" y="68" width="22" height="5" rx="2" fill="#9e57fa"/>
+      <rect x="150" y="110" width="44" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="150" y="124" width="50" height="5" rx="2" fill="#4b4463"/>
+      <rect x="150" y="136" width="36" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <g>
+      <circle cx="222" cy="96" r="4.5" fill="#1a1724" stroke="#9e57fa" stroke-width="2"/>
+      <rect x="216" y="68" width="22" height="5" rx="2" fill="#9e57fa"/>
+      <rect x="216" y="110" width="48" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="216" y="124" width="42" height="5" rx="2" fill="#4b4463"/>
+      <rect x="216" y="136" width="46" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">TIMELINE</text>
+  </g>
+
+  <!-- ============ 10 quote ============ -->
+  <g transform="translate(346,522)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <circle cx="145" cy="86" r="66" fill="#7733f8" opacity=".1"/>
+    <rect x="52" y="72" width="186" height="13" rx="2" fill="#e8e4f2"/>
+    <rect x="72" y="94" width="146" height="13" rx="2" fill="#e8e4f2"/>
+    <rect x="112" y="130" width="66" height="6" rx="2" fill="#6b6480"/>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">QUOTE</text>
+  </g>
+
+  <!-- ============ 11 table ============ -->
+  <g transform="translate(652,522)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="38" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="96" height="12" rx="2" fill="#e8e4f2"/>
+    <rect x="20" y="66" width="250" height="1" fill="#4b4463"/>
+    <g fill="#6b6480" font-size="8">
+      <text x="20" y="62">内容</text><text x="150" y="62">版式</text><text x="228" y="62">占比</text>
+    </g>
+    <g fill="#4b4463">
+      <rect x="20" y="80" width="100" height="6" rx="2" fill="#cfc8de"/><rect x="150" y="80" width="54" height="6" rx="2"/><rect x="228" y="80" width="22" height="6" rx="2" fill="#9e57fa"/>
+      <rect x="20" y="96" width="250" height="1"/>
+      <rect x="20" y="108" width="86" height="6" rx="2" fill="#cfc8de"/><rect x="150" y="108" width="48" height="6" rx="2"/><rect x="228" y="108" width="22" height="6" rx="2" fill="#9e57fa"/>
+      <rect x="20" y="124" width="250" height="1"/>
+      <rect x="20" y="136" width="112" height="6" rx="2" fill="#cfc8de"/><rect x="150" y="136" width="60" height="6" rx="2"/><rect x="228" y="136" width="22" height="6" rx="2" fill="#9e57fa"/>
+      <rect x="20" y="152" width="250" height="1"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">TABLE</text>
+  </g>
+
+  <!-- ============ 12 image ============ -->
+  <g transform="translate(958,522)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="44" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="132" height="12" rx="2" fill="#e8e4f2"/>
+    <rect x="20" y="70" width="160" height="90" rx="8" fill="#221e2e" stroke="#2b2638"/>
+    <path d="M55 140 L85 108 L108 128 L132 96 L160 140 Z" fill="#332c48"/>
+    <circle cx="60" cy="92" r="8" fill="#3a2f56"/>
+    <g>
+      <rect x="196" y="74" width="66" height="7" rx="2" fill="#9e57fa" opacity=".8"/>
+      <rect x="196" y="88" width="74" height="5" rx="2" fill="#4b4463"/>
+      <rect x="196" y="100" width="58" height="5" rx="2" fill="#4b4463"/>
+      <rect x="196" y="120" width="66" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="196" y="134" width="72" height="5" rx="2" fill="#4b4463"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">IMAGE</text>
+  </g>
+
+  <!-- ============ 13 process ============ -->
+  <g transform="translate(40,728)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <rect x="20" y="20" width="36" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="20" y="38" width="128" height="12" rx="2" fill="#e8e4f2"/>
+    <g>
+      <rect x="20" y="72" width="58" height="86" rx="7" fill="#221e2e" stroke="#2b2638"/>
+      <rect x="30" y="82" width="14" height="5" rx="2" fill="#9e57fa"/>
+      <rect x="30" y="96" width="38" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="30" y="110" width="40" height="4" rx="2" fill="#4b4463"/>
+      <rect x="30" y="122" width="32" height="4" rx="2" fill="#4b4463"/>
+    </g>
+    <text x="84" y="120" fill="#6b6480" font-size="11">→</text>
+    <g>
+      <rect x="98" y="72" width="58" height="86" rx="7" fill="#221e2e" stroke="#2b2638"/>
+      <rect x="108" y="82" width="14" height="5" rx="2" fill="#9e57fa"/>
+      <rect x="108" y="96" width="34" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="108" y="110" width="40" height="4" rx="2" fill="#4b4463"/>
+      <rect x="108" y="122" width="26" height="4" rx="2" fill="#4b4463"/>
+    </g>
+    <text x="162" y="120" fill="#6b6480" font-size="11">→</text>
+    <g>
+      <rect x="176" y="72" width="58" height="86" rx="7" fill="#221e2e" stroke="#2b2638"/>
+      <rect x="186" y="82" width="14" height="5" rx="2" fill="#9e57fa"/>
+      <rect x="186" y="96" width="40" height="7" rx="2" fill="#cfc8de"/>
+      <rect x="186" y="110" width="38" height="4" rx="2" fill="#4b4463"/>
+      <rect x="186" y="122" width="30" height="4" rx="2" fill="#4b4463"/>
+    </g>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1">PROCESS</text>
+  </g>
+
+  <!-- ============ 14 end ============ -->
+  <g transform="translate(346,728)">
+    <rect width="290" height="190" rx="10" fill="#221830" stroke="#2b2638"/>
+    <circle cx="218" cy="150" r="52" fill="#7733f8" opacity=".13"/>
+    <rect x="22" y="60" width="44" height="8" rx="2" fill="#9e57fa"/>
+    <rect x="22" y="80" width="200" height="14" rx="2" fill="#e8e4f2"/>
+    <rect x="22" y="102" width="140" height="14" rx="2" fill="#e8e4f2"/>
+    <rect x="22" y="130" width="176" height="6" rx="2" fill="#5b5374"/>
+    <rect x="22" y="150" width="62" height="20" rx="6" fill="#9e57fa"/>
+    <rect x="92" y="150" width="62" height="20" rx="6" fill="none" stroke="#3d3552"/>
+    <text x="16" y="182" fill="#6b6480" font-size="10" letter-spacing="1" opacity="0">END</text>
+  </g>
+
+  <!-- ============ 15 主题色条 ============ -->
+  <g transform="translate(652,728)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <text x="20" y="34" fill="#cfc8de" font-size="12" font-weight="600">10 套主题</text>
+    <g>
+      <rect x="20" y="48" width="118" height="24" rx="5" fill="#14121b"/><rect x="20" y="48" width="6" height="24" rx="3" fill="#9e57fa"/><text x="34" y="64" fill="#b9b2cc" font-size="9">violet</text>
+      <rect x="152" y="48" width="118" height="24" rx="5" fill="#0e0e10"/><rect x="152" y="48" width="6" height="24" rx="3" fill="#d9b05c"/><text x="166" y="64" fill="#b9b2cc" font-size="9">obsidian</text>
+      <rect x="20" y="78" width="118" height="24" rx="5" fill="#0a1224"/><rect x="20" y="78" width="6" height="24" rx="3" fill="#4ecdc4"/><text x="34" y="94" fill="#b9b2cc" font-size="9">aurora</text>
+      <rect x="152" y="78" width="118" height="24" rx="5" fill="#faf7f2"/><rect x="152" y="78" width="6" height="24" rx="3" fill="#c0392b"/><text x="166" y="94" fill="#4a443c" font-size="9">paper</text>
+      <rect x="20" y="108" width="118" height="24" rx="5" fill="#f4f7fb"/><rect x="20" y="108" width="6" height="24" rx="3" fill="#1b6ca8"/><text x="34" y="124" fill="#3d5266" font-size="9">fjord</text>
+      <rect x="152" y="108" width="118" height="24" rx="5" fill="#f5f7f2"/><rect x="152" y="108" width="6" height="24" rx="3" fill="#3f7d3a"/><text x="166" y="124" fill="#43543c" font-size="9">moss</text>
+      <rect x="20" y="138" width="118" height="24" rx="5" fill="#fbf5ef"/><rect x="20" y="138" width="6" height="24" rx="3" fill="#b5562f"/><text x="34" y="154" fill="#5c4437" font-size="9">clay</text>
+      <rect x="152" y="138" width="118" height="24" rx="5" fill="#ffffff"/><rect x="152" y="138" width="6" height="24" rx="3" fill="#0a0a0a"/><text x="166" y="154" fill="#8a8a8a" font-size="9">ink</text>
+      <rect x="20" y="168" width="118" height="24" rx="5" fill="#17111f"/><rect x="20" y="168" width="6" height="24" rx="3" fill="#e879f9"/><text x="34" y="184" fill="#b9b2cc" font-size="9">nebula</text>
+      <rect x="152" y="168" width="118" height="24" rx="5" fill="#131518"/><rect x="152" y="168" width="6" height="24" rx="3" fill="#35e0c4"/><text x="166" y="184" fill="#b9b2cc" font-size="9">graphite</text>
+    </g>
+  </g>
+
+  <!-- ============ 16 成品 ============ -->
+  <g transform="translate(958,728)">
+    <rect width="290" height="190" rx="10" fill="#1a1724" stroke="#2b2638"/>
+    <text x="20" y="34" fill="#cfc8de" font-size="12" font-weight="600">产出</text>
+    <text x="20" y="56" fill="#7d7592" font-size="9.5">单文件 · 零依赖 · 双击放映</text>
+    <rect x="20" y="70" width="72" height="44" rx="6" fill="#221e2e" stroke="#2b2638"/>
+    <text x="56" y="97" fill="#9e57fa" font-size="13" text-anchor="middle" font-family="monospace">.html</text>
+    <text x="106" y="86" fill="#b9b2cc" font-size="10">37 KB / 14 页</text>
+    <text x="106" y="102" fill="#6b6480" font-size="9">一个文件发谁都能开</text>
+    <g fill="#7d7592" font-size="9.5">
+      <text x="20" y="140">→ 空格 / ← 翻页</text>
+      <text x="20" y="158">F 全屏</text>
+      <text x="20" y="176">Ctrl+P 导出 PDF</text>
+    </g>
+    <g transform="translate(190,130)">
+      <rect width="78" height="46" rx="6" fill="#221e2e" stroke="#2b2638"/>
+      <rect x="12" y="12" width="54" height="4" rx="2" fill="#9e57fa"/>
+      <rect x="12" y="22" width="42" height="3" rx="1.5" fill="#4b4463"/>
+      <rect x="12" y="30" width="48" height="3" rx="1.5" fill="#4b4463"/>
+    </g>
+  </g>
+</svg>

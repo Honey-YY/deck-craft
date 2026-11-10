@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="violet">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<link rel="stylesheet" href="themes.css">
+<link rel="stylesheet" href="layouts.css">
+</head>
+<body>
+
+<div class="stage">
+<div class="deck" id="deck">
+
+  <!-- 1 · 封面：改这里的文字即可 -->
+  <section class="slide cover on">
+    <div class="glow" style="width:640px;height:640px;left:-160px;top:-260px;"></div>
+    <div class="accent-bar"></div>
+    <div class="slide-inner">
+      <div class="eyebrow">{{EYEBROW}}</div>
+      <h1 class="h1">{{H1}}</h1>
+      <p class="lead">{{LEAD}}</p>
+      <div class="meta">
+        <div>日期<b>{{DATE}}</b></div>
+        <div>页数<b>{{PAGES}}</b></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>{{BRAND}}</span><span>01</span></div>
+  </section>
+
+  <!--
+    加页就复制 assets/deck.html 里对应版式的那一整段 <section>。
+    可用版式：
+      cover / agenda / section / bullets / columns / cards / stat
+      chart / timeline / quote / table / image / process / end
+    每页必须有：class="slide 版式名"、<div class="slide-foot"> 页码。
+    只有第一页带 on 类 —— 其余不要写 on。
+  -->
+
+</div>
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="hud">
+  <button id="prev" title="上一页 ←">←</button>
+  <span class="count" id="count">1 / 1</span>
+  <button id="next" title="下一页 →">→</button>
+  <button id="full" title="全屏 F">⛶</button>
+</div>
+
+<script src="player.js"></script>
+</body>
+</html>

@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="violet">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>怎么做出好演示稿 · deck-craft</title>
+<style>
+/* ==========================================================================
+   deck-craft · 主题层
+   一套 deck 只用一个主题。改 data-theme 即整份换肤。
+   ========================================================================== */
+
+:root {
+  /* 版式基准：所有坐标按 1280 × 720 写死，靠外层 scale 适配窗口 */
+  --w: 1280px;
+  --h: 720px;
+  --pad: 72px;
+
+  /* 字族 */
+  --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  --mono: "DIN Alternate", "D-DIN-Pro", "SF Mono", ui-monospace, "Cascadia Code", monospace;
+  --serif: "Songti SC", "Source Han Serif SC", "Noto Serif SC", Georgia, serif;
+
+  /* 动效 */
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+/* --- 1. 紫电 · AiPPT 同款 ------------------------------------------------- */
+:root[data-theme="violet"] {
+  --bg: #14121b;
+  --bg-2: #1c1926;
+  --fg: #f4f1fa;
+  --fg-2: #c9c2d9;
+  --muted: #8b83a0;
+  --accent: #9e57fa;
+  --accent-2: #7733f8;
+  --accent-fg: #ffffff;
+  --line: rgba(255, 255, 255, .10);
+  --card: rgba(255, 255, 255, .045);
+  --glow: rgba(119, 51, 248, .34);
+  --grad: linear-gradient(135deg, #3b2af9 0%, #b547e4 52%, #f335ec 100%);
+}
+
+/* --- 2. 曜石 · 金 --------------------------------------------------------- */
+:root[data-theme="obsidian"] {
+  --bg: #0e0e10;
+  --bg-2: #17171a;
+  --fg: #f5f3ee;
+  --fg-2: #c4bfb4;
+  --muted: #837c70;
+  --accent: #d9b05c;
+  --accent-2: #b8912f;
+  --accent-fg: #14120d;
+  --line: rgba(255, 255, 255, .09);
+  --card: rgba(255, 255, 255, .04);
+  --glow: rgba(217, 176, 92, .26);
+  --grad: linear-gradient(135deg, #d9b05c 0%, #f0d89a 50%, #a8811f 100%);
+}
+
+/* --- 3. 极光 · 深蓝紫 ----------------------------------------------------- */
+:root[data-theme="aurora"] {
+  --bg: #0a1224;
+  --bg-2: #111c34;
+  --fg: #eaf1ff;
+  --fg-2: #a9bcdc;
+  --muted: #6e82a6;
+  --accent: #4ecdc4;
+  --accent-2: #2b9fd4;
+  --accent-fg: #04141c;
+  --line: rgba(140, 180, 255, .13);
+  --card: rgba(120, 170, 255, .055);
+  --glow: rgba(78, 205, 196, .28);
+  --grad: linear-gradient(135deg, #4ecdc4 0%, #5b8def 50%, #8a5cf6 100%);
+}
+
+/* --- 4. 纸感 · 暖白 ------------------------------------------------------- */
+:root[data-theme="paper"] {
+  --bg: #faf7f2;
+  --bg-2: #f2ede4;
+  --fg: #1f1b16;
+  --fg-2: #4a443c;
+  --muted: #8a8175;
+  --accent: #c0392b;
+  --accent-2: #96271c;
+  --accent-fg: #ffffff;
+  --line: rgba(31, 27, 22, .13);
+  --card: rgba(31, 27, 22, .035);
+  --glow: rgba(192, 57, 43, .16);
+  --grad: linear-gradient(135deg, #c0392b 0%, #e07a5f 100%);
+}
+
+/* --- 5. 峡湾 · 冷蓝 ------------------------------------------------------- */
+:root[data-theme="fjord"] {
+  --bg: #f4f7fb;
+  --bg-2: #e8eef7;
+  --fg: #10202f;
+  --fg-2: #3d5266;
+  --muted: #7d8fa3;
+  --accent: #1b6ca8;
+  --accent-2: #124f7d;
+  --accent-fg: #ffffff;
+  --line: rgba(16, 32, 47, .12);
+  --card: rgba(16, 32, 47, .03);
+  --glow: rgba(27, 108, 168, .16);
+  --grad: linear-gradient(135deg, #1b6ca8 0%, #4aa3d8 60%, #7fd0e8 100%);
+}
+
+/* --- 6. 苔原 · 松绿 ------------------------------------------------------- */
+:root[data-theme="moss"] {
+  --bg: #f5f7f2;
+  --bg-2: #e9eee2;
+  --fg: #1a2416;
+  --fg-2: #43543c;
+  --muted: #7f8f76;
+  --accent: #3f7d3a;
+  --accent-2: #2c5c29;
+  --accent-fg: #ffffff;
+  --line: rgba(26, 36, 22, .12);
+  --card: rgba(26, 36, 22, .03);
+  --glow: rgba(63, 125, 58, .16);
+  --grad: linear-gradient(135deg, #3f7d3a 0%, #7ab55c 100%);
+}
+
+/* --- 7. 赤陶 · 暖砂 ------------------------------------------------------- */
+:root[data-theme="clay"] {
+  --bg: #fbf5ef;
+  --bg-2: #f3e8dc;
+  --fg: #2d1f17;
+  --fg-2: #5c4437;
+  --muted: #9b8271;
+  --accent: #b5562f;
+  --accent-2: #8f3d1e;
+  --accent-fg: #ffffff;
+  --line: rgba(45, 31, 23, .13);
+  --card: rgba(45, 31, 23, .035);
+  --glow: rgba(181, 86, 47, .16);
+  --grad: linear-gradient(135deg, #b5562f 0%, #e0906a 100%);
+}
+
+/* --- 8. 墨白 · 极简 ------------------------------------------------------- */
+:root[data-theme="ink"] {
+  --bg: #ffffff;
+  --bg-2: #f4f4f4;
+  --fg: #0a0a0a;
+  --fg-2: #3d3d3d;
+  --muted: #8a8a8a;
+  --accent: #0a0a0a;
+  --accent-2: #333333;
+  --accent-fg: #ffffff;
+  --line: rgba(0, 0, 0, .14);
+  --card: rgba(0, 0, 0, .025);
+  --glow: rgba(0, 0, 0, .10);
+  --grad: linear-gradient(135deg, #0a0a0a 0%, #4a4a4a 100%);
+}
+
+/* --- 9. 星尘 · 深紫罗兰 --------------------------------------------------- */
+:root[data-theme="nebula"] {
+  --bg: #17111f;
+  --bg-2: #221830;
+  --fg: #f6eefe;
+  --fg-2: #cbaddd;
+  --muted: #91789f;
+  --accent: #e879f9;
+  --accent-2: #c026d3;
+  --accent-fg: #1a0b1f;
+  --line: rgba(255, 255, 255, .10);
+  --card: rgba(255, 255, 255, .045);
+  --glow: rgba(232, 121, 249, .30);
+  --grad: linear-gradient(135deg, #c026d3 0%, #e879f9 55%, #f9a8d4 100%);
+}
+
+/* --- 10. 石墨 · 电光青 ---------------------------------------------------- */
+:root[data-theme="graphite"] {
+  --bg: #131518;
+  --bg-2: #1b1e23;
+  --fg: #eef2f5;
+  --fg-2: #b3bcc6;
+  --muted: #78838f;
+  --accent: #35e0c4;
+  --accent-2: #14b8a6;
+  --accent-fg: #06201d;
+  --line: rgba(255, 255, 255, .10);
+  --card: rgba(255, 255, 255, .04);
+  --glow: rgba(53, 224, 196, .26);
+  --grad: linear-gradient(135deg, #14b8a6 0%, #35e0c4 60%, #a3f7e4 100%);
+}
+
+/* 深色主题清单：用于自动挑选正文对比策略 */
+:root[data-dark="1"] { color-scheme: dark; }
+
+</style>
+<style>
+/* ==========================================================================
+   deck-craft · 版式层
+   基准画布 1280 × 720。所有尺寸按像素写死，由 .deck 外层统一缩放。
+   一个 .slide 元素就是一页，它的第二个 class 决定版式。
+   ========================================================================== */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: #08070b;
+  color: var(--fg);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+/* --- 舞台：把 1280×720 居中缩放 ------------------------------------------- */
+.stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.deck {
+  width: var(--w);
+  height: var(--h);
+  position: relative;
+  transform-origin: center center;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* --- 页 ------------------------------------------------------------------- */
+.slide {
+  position: absolute;
+  inset: 0;
+  width: var(--w);
+  height: var(--h);
+  background: var(--bg);
+  color: var(--fg);
+  display: none;
+  overflow: hidden;
+  isolation: isolate;
+}
+.slide.on { display: block; }
+
+.slide-inner {
+  position: absolute;
+  inset: 0;
+  padding: var(--pad);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 页脚：品牌 + 页码 */
+.slide-foot {
+  position: absolute;
+  left: var(--pad);
+  right: var(--pad);
+  bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  letter-spacing: .06em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* 细分割线 */
+.hr {
+  height: 1px;
+  background: var(--line);
+  width: 100%;
+}
+
+/* 强调短杠 */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.kicker::before {
+  content: "";
+  width: 26px;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* 通用标题 */
+.h1 { font-size: 76px; line-height: 1.06; font-weight: 700; letter-spacing: -.02em; }
+.h2 { font-size: 44px; line-height: 1.18; font-weight: 700; letter-spacing: -.015em; }
+.h3 { font-size: 26px; line-height: 1.3; font-weight: 650; }
+.lead { font-size: 22px; line-height: 1.55; color: var(--fg-2); font-weight: 400; }
+.small { font-size: 16px; line-height: 1.5; color: var(--muted); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* 背景装饰：光照 + 网格 */
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  background: var(--glow);
+  pointer-events: none;
+  z-index: 0;
+}
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: .35;
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 0%, transparent 72%);
+  z-index: 0;
+}
+.slide-inner > * { position: relative; z-index: 1; }
+
+/* ==========================================================================
+   1 · cover 封面
+   ========================================================================== */
+.cover .slide-inner { justify-content: flex-end; padding-bottom: 96px; }
+.cover .eyebrow {
+  font-size: 15px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.cover .h1 { font-size: 82px; max-width: 15ch; }
+.cover .lead { margin-top: 24px; max-width: 46ch; font-size: 24px; }
+.cover .meta {
+  margin-top: 52px;
+  display: flex;
+  gap: 44px;
+  font-size: 15px;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+.cover .meta b { color: var(--fg-2); font-weight: 600; display: block; margin-top: 6px; font-size: 17px; }
+.cover .accent-bar {
+  position: absolute;
+  left: 0; top: 0;
+  width: 6px;
+  height: 190px;
+  background: var(--grad);
+  z-index: 2;
+}
+
+/* ==========================================================================
+   2 · agenda 目录
+   ========================================================================== */
+.agenda .slide-inner { justify-content: center; }
+.agenda .list { margin-top: 44px; display: flex; flex-direction: column; }
+.agenda .row {
+  display: grid;
+  grid-template-columns: 76px 1fr auto;
+  align-items: baseline;
+  gap: 28px;
+  padding: 21px 0;
+  border-top: 1px solid var(--line);
+}
+.agenda .row:last-child { border-bottom: 1px solid var(--line); }
+.agenda .idx {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--accent);
+  letter-spacing: .1em;
+}
+.agenda .row .h3 { font-size: 27px; font-weight: 600; }
+.agenda .row small { font-size: 15px; color: var(--muted); }
+
+/* ==========================================================================
+   3 · section 章节分隔
+   ========================================================================== */
+.section { background: var(--bg-2); }
+.section .slide-inner { justify-content: center; }
+.section .big-num {
+  font-family: var(--mono);
+  font-size: 200px;
+  line-height: .82;
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--accent);
+  opacity: .5;
+  margin-bottom: -34px;
+}
+.section .h1 { font-size: 62px; }
+.section .lead { margin-top: 20px; max-width: 44ch; }
+
+/* ==========================================================================
+   4 · bullets 要点
+   ========================================================================== */
+.bullets .slide-inner { justify-content: center; }
+.bullets .body { margin-top: 46px; display: flex; flex-direction: column; gap: 30px; }
+.bullets .item { display: grid; grid-template-columns: 40px 1fr; gap: 22px; align-items: start; }
+.bullets .dot {
+  width: 12px; height: 12px;
+  margin-top: 13px;
+  border-radius: 3px;
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+.bullets .item .h3 { font-size: 25px; margin-bottom: 7px; }
+.bullets .item p { font-size: 19px; line-height: 1.55; color: var(--muted); max-width: 68ch; }
+
+/* ==========================================================================
+   5 · columns 双栏
+   ========================================================================== */
+.columns .slide-inner { justify-content: center; }
+.columns .cols { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+.columns .col h4 {
+  font-size: 15px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.columns .col p, .columns .col li { font-size: 19px; line-height: 1.62; color: var(--fg-2); }
+.columns .col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.columns .col li::before { content: "—"; color: var(--muted); margin-right: 12px; }
+
+/* ==========================================================================
+   6 · cards 卡片组（3 或 6 张）
+   ========================================================================== */
+.cards .slide-inner { justify-content: center; }
+.cards .grid { margin-top: 44px; display: grid; gap: 20px; }
+.cards[data-n="3"] .grid { grid-template-columns: repeat(3, 1fr); }
+.cards[data-n="4"] .grid { grid-template-columns: repeat(4, 1fr); }
+.cards[data-n="6"] .grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); }
+.cards .c {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 152px;
+}
+.cards .c .ico {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  display: grid; place-items: center;
+  font-size: 17px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.cards .c .h3 { font-size: 20px; }
+.cards .c p { font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+
+/* ==========================================================================
+   7 · stat 数据大字
+   ========================================================================== */
+.stat .slide-inner { justify-content: center; }
+.stat .row { margin-top: 52px; display: grid; gap: 34px; }
+.stat[data-n="1"] .row { grid-template-columns: 1fr; }
+.stat[data-n="2"] .row { grid-template-columns: repeat(2, 1fr); }
+.stat[data-n="3"] .row { grid-template-columns: repeat(3, 1fr); }
+.stat .s { border-left: 2px solid var(--line); padding-left: 26px; }
+.stat .s:first-child { border-left-color: var(--accent); }
+.stat .v {
+  font-family: var(--mono);
+  font-size: 82px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  color: var(--fg);
+}
+.stat .v em { font-size: .42em; font-style: normal; color: var(--accent); margin-left: 4px; }
+.stat .k { margin-top: 14px; font-size: 17px; color: var(--muted); line-height: 1.45; }
+
+/* ==========================================================================
+   8 · chart 图表（纯 CSS/SVG 条形与折线）
+   ========================================================================== */
+.chart .slide-inner { justify-content: center; }
+.chart .wrap { margin-top: 40px; display: grid; grid-template-columns: 1fr 340px; gap: 56px; align-items: end; }
+.chart .bars { display: flex; align-items: flex-end; gap: 26px; height: 300px; border-bottom: 1px solid var(--line); padding-bottom: 0; }
+.chart .bar { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 10px; height: 100%; }
+.chart .bar i {
+  display: block;
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  background: var(--grad);
+  opacity: .9;
+}
+.chart .bar.alt i { background: var(--card); border: 1px solid var(--line); }
+.chart .bar span { font-size: 13px; color: var(--muted); letter-spacing: .04em; }
+.chart .bar b { font-family: var(--mono); font-size: 16px; color: var(--fg-2); }
+.chart .legend { display: flex; flex-direction: column; gap: 16px; padding-bottom: 30px; }
+.chart .lg { display: flex; gap: 12px; align-items: flex-start; }
+.chart .lg i { width: 10px; height: 10px; border-radius: 2px; background: var(--accent); margin-top: 6px; flex: none; }
+.chart .lg p { font-size: 15px; line-height: 1.5; color: var(--muted); }
+
+/* ==========================================================================
+   9 · timeline 时间线
+   ========================================================================== */
+.timeline .slide-inner { justify-content: center; }
+.timeline .track {
+  margin-top: 60px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0;
+  position: relative;
+}
+.timeline .track::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 47px;
+  height: 1px;
+  background: var(--line);
+}
+.timeline .node { position: relative; padding-right: 26px; }
+.timeline .node::before {
+  content: "";
+  position: absolute;
+  top: 41px; left: 0;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  z-index: 1;
+}
+.timeline .node .t { font-family: var(--mono); font-size: 14px; color: var(--accent); letter-spacing: .08em; margin-bottom: 64px; }
+.timeline .node .h3 { font-size: 19px; margin-bottom: 8px; }
+.timeline .node p { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+
+/* ==========================================================================
+   10 · quote 引用
+   ========================================================================== */
+.quote .slide-inner { justify-content: center; align-items: center; text-align: center; }
+.quote blockquote {
+  font-family: var(--serif);
+  font-size: 50px;
+  line-height: 1.34;
+  font-weight: 600;
+  max-width: 24ch;
+  letter-spacing: -.01em;
+}
+.quote blockquote::before { content: "“"; color: var(--accent); }
+.quote blockquote::after { content: "”"; color: var(--accent); }
+.quote cite {
+  margin-top: 40px;
+  font-style: normal;
+  font-size: 16px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   11 · table 表格
+   ========================================================================== */
+.table .slide-inner { justify-content: center; }
+.table table { margin-top: 40px; width: 100%; border-collapse: collapse; }
+.table th {
+  text-align: left;
+  font-size: 14px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 0 20px 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.table td {
+  font-size: 18px;
+  padding: 19px 20px 19px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--fg-2);
+  line-height: 1.4;
+}
+.table tr:last-child td { border-bottom: none; }
+.table td:first-child { color: var(--fg); font-weight: 600; }
+.table td .num { color: var(--accent); }
+
+/* ==========================================================================
+   12 · image 图文
+   ========================================================================== */
+.image .slide-inner { justify-content: center; }
+.image .split { margin-top: 36px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 52px; align-items: center; flex: 1; }
+.image .frame {
+  height: 100%;
+  min-height: 340px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.image .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.image .side { display: flex; flex-direction: column; gap: 22px; }
+.image .side .item { padding-left: 18px; border-left: 2px solid var(--line); }
+.image .side .item:first-child { border-left-color: var(--accent); }
+.image .side .h3 { font-size: 19px; margin-bottom: 6px; }
+.image .side p { font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+
+/* ==========================================================================
+   13 · process 流程步骤
+   ========================================================================== */
+.process .slide-inner { justify-content: center; }
+.process .flow { margin-top: 52px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px; }
+.process .step {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px 22px;
+  position: relative;
+}
+.process .step .n {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: .1em;
+  margin-bottom: 14px;
+}
+.process .step .h3 { font-size: 18px; margin-bottom: 8px; }
+.process .step p { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.process .step::after {
+  content: "→";
+  position: absolute;
+  right: -13px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 15px;
+  z-index: 2;
+}
+.process .step:last-child::after { content: none; }
+
+/* ==========================================================================
+   14 · end 结尾
+   ========================================================================== */
+.end { background: var(--bg-2); }
+.end .slide-inner { justify-content: center; align-items: flex-start; }
+.end .h1 { font-size: 68px; max-width: 18ch; }
+.end .lead { margin-top: 26px; max-width: 46ch; }
+.end .actions { margin-top: 54px; display: flex; gap: 14px; }
+.end .btn {
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.end .btn.primary { background: var(--grad); color: var(--accent-fg); }
+.end .btn.ghost { border: 1px solid var(--line); color: var(--fg-2); }
+
+/* ==========================================================================
+   放映控件（仅编辑态可见）
+   ========================================================================== */
+.hud {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: rgba(12, 12, 16, .78);
+  border: 1px solid rgba(255, 255, 255, .12);
+  backdrop-filter: blur(14px);
+  color: #eae6f2;
+  font: 500 12px/1 var(--sans);
+  letter-spacing: .06em;
+  z-index: 100;
+  transition: opacity .3s var(--ease);
+}
+.hud button {
+  all: unset;
+  cursor: pointer;
+  padding: 5px 9px;
+  border-radius: 6px;
+  color: inherit;
+  transition: background .15s;
+}
+.hud button:hover { background: rgba(255, 255, 255, .12); }
+.hud .count { font-family: var(--mono); opacity: .75; }
+body.playing .hud { opacity: 0; pointer-events: none; }
+
+/* 进度条 */
+.progress {
+  position: fixed;
+  left: 0; top: 0;
+  height: 2px;
+  background: var(--grad);
+  z-index: 101;
+  transition: width .32s var(--ease);
+}
+body.playing .progress { opacity: .8; }
+
+/* ==========================================================================
+   打印：每页一张 16:9
+   ========================================================================== */
+@media print {
+  @page { size: 1280px 720px; margin: 0; }
+  html, body { overflow: visible; background: #fff; }
+  .stage { position: static; display: block; }
+  .deck { transform: none !important; }
+  .slide {
+    display: block !important;
+    position: relative;
+    inset: auto;
+    break-after: page;
+    page-break-after: always;
+  }
+  .slide:last-child { break-after: auto; }
+  .hud, .progress { display: none !important; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="stage">
+<div class="deck" id="deck">
+
+  <!-- ========== 1 · cover ========== -->
+  <section class="slide cover on">
+    <div class="glow" style="width:640px;height:640px;left:-160px;top:-260px;"></div>
+    <div class="accent-bar"></div>
+    <div class="slide-inner">
+      <div class="eyebrow">Deck Craft · 使用说明</div>
+      <h1 class="h1">怎么做出<br>一份好演示稿</h1>
+      <p class="lead">一页只讲一件事。先确认再动手。数据不编造。这三条做到了，剩下的只是手艺。</p>
+      <div class="meta">
+        <div>版本<b>v1.0</b></div>
+        <div>页数<b>14</b></div>
+        <div>版式<b>14 种</b></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>01</span></div>
+  </section>
+
+  <!-- ========== 2 · agenda ========== -->
+  <section class="slide agenda">
+    <div class="glow" style="width:520px;height:520px;right:-180px;top:-160px;"></div>
+    <div class="slide-inner">
+      <div class="kicker">Agenda</div>
+      <h2 class="h2" style="margin-top:16px;">这份稿子讲五件事</h2>
+      <div class="list">
+        <div class="row"><span class="idx">01</span><span class="h3">先想清楚给谁看</span><small>受众决定信息密度</small></div>
+        <div class="row"><span class="idx">02</span><span class="h3">一页一个观点</span><small>观点是标题，不是分类</small></div>
+        <div class="row"><span class="idx">03</span><span class="h3">选对版式</span><small>内容是形状，版式是容器</small></div>
+        <div class="row"><span class="idx">04</span><span class="h3">让数字说话</span><small>数据优先图表化</small></div>
+        <div class="row"><span class="idx">05</span><span class="h3">交付与放映</span><small>单文件，双击就能放</small></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>02</span></div>
+  </section>
+
+  <!-- ========== 3 · section ========== -->
+  <section class="slide section">
+    <div class="slide-inner">
+      <div class="big-num">01</div>
+      <h1 class="h1">先想清楚给谁看</h1>
+      <p class="lead">同一份内容，给投资人看和给技术团队看，是两份完全不同的稿子。</p>
+    </div>
+    <div class="slide-foot"><span>受众</span><span>03</span></div>
+  </section>
+
+  <!-- ========== 4 · bullets ========== -->
+  <section class="slide bullets">
+    <div class="slide-inner">
+      <div class="kicker">Three failures</div>
+      <h2 class="h2" style="margin-top:16px;">没想清楚受众的三个信号</h2>
+      <div class="body">
+        <div class="item"><div class="dot"></div><div>
+          <div class="h3">标题写成分类名</div>
+          <p>「市场分析」「产品规划」是目录，不是观点。观众看完标题不知道你要说什么。</p>
+        </div></div>
+        <div class="item"><div class="dot"></div><div>
+          <div class="h3">每页塞三件事</div>
+          <p>一页三个主题，观众一个都记不住。要么拆成三页，要么只留最强的那一个。</p>
+        </div></div>
+        <div class="item"><div class="dot"></div><div>
+          <div class="h3">数字没有出处</div>
+          <p>「提升了 300%」——相比什么？什么时候？谁的样本？没有锚点的数字等于没讲。</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>04</span></div>
+  </section>
+
+  <!-- ========== 5 · columns ========== -->
+  <section class="slide columns">
+    <div class="slide-inner">
+      <div class="kicker">Rewrite</div>
+      <h2 class="h2" style="margin-top:16px;">把分类名改成观点</h2>
+      <div class="cols">
+        <div class="col">
+          <h4>改之前</h4>
+          <ul>
+            <li>市场分析</li>
+            <li>产品规划</li>
+            <li>竞争格局</li>
+            <li>下一步计划</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>改之后</h4>
+          <ul>
+            <li>市场在向中端价格带集中</li>
+            <li>我们只做一件事，但要做到最狠</li>
+            <li>三个对手都在补同一块短板</li>
+            <li>下季度押注单一渠道</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>05</span></div>
+  </section>
+
+  <!-- ========== 6 · cards ========== -->
+  <section class="slide cards" data-n="3">
+    <div class="glow" style="width:560px;height:560px;left:50%;bottom:-360px;transform:translateX(-50%);"></div>
+    <div class="slide-inner">
+      <div class="kicker">Skeleton</div>
+      <h2 class="h2" style="margin-top:16px;">三种页面骨架覆盖九成场景</h2>
+      <div class="grid">
+        <div class="c"><div class="ico">◧</div><div class="h3">主张页</div><p>一句话结论 + 三到四个支撑点。用于论证、说服、汇报核心结论。</p></div>
+        <div class="c"><div class="ico">▤</div><div class="h3">数据页</div><p>一个大数字或一组条形。用于证明规模、增速、占比、差距。</p></div>
+        <div class="c"><div class="ico">◈</div><div class="h3">结构页</div><p>流程、时间线、矩阵、分层。用于解释「怎么发生」而不是「是什么」。</p></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>06</span></div>
+  </section>
+
+  <!-- ========== 7 · stat ========== -->
+  <section class="slide stat" data-n="3">
+    <div class="slide-inner">
+      <div class="kicker">Density</div>
+      <h2 class="h2" style="margin-top:16px;">一页的字数上限</h2>
+      <div class="row">
+        <div class="s"><div class="v num">1<em>个观点</em></div><div class="k">一页只允许一个观点。多一个，观众就要做一次选择。</div></div>
+        <div class="s"><div class="v num">3<em>条支撑</em></div><div class="k">支撑点超过四条，说明你还没想清楚哪个最重要。</div></div>
+        <div class="s"><div class="v num">40<em>字正文</em></div><div class="k">正文超过四十字，就已经是该放进讲稿而不是页面里的内容。</div></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>07</span></div>
+  </section>
+
+  <!-- ========== 8 · chart ========== -->
+  <section class="slide chart">
+    <div class="slide-inner">
+      <div class="kicker">Evidence</div>
+      <h2 class="h2" style="margin-top:16px;">观众记住的是形状，不是数字</h2>
+      <div class="wrap">
+        <div class="bars">
+          <div class="bar alt"><b>18</b><i style="height:16%"></i><span>文字页</span></div>
+          <div class="bar alt"><b>31</b><i style="height:29%"></i><span>文字+图</span></div>
+          <div class="bar"><b>74</b><i style="height:72%"></i><span>单一图表</span></div>
+          <div class="bar"><b>96</b><i style="height:94%"></i><span>图表+一句结论</span></div>
+        </div>
+        <div class="legend">
+          <div class="lg"><i></i><p>柱状图只回答一个问题：谁比谁高。</p></div>
+          <div class="lg"><i style="background:var(--muted)"></i><p>图例不要超过三项。超过三项就应该拆页。</p></div>
+          <div class="lg"><i style="background:var(--muted)"></i><p>图表必须有标题句，而不是「图 1」。</p></div>
+          <div class="lg"><i style="background:var(--line)"></i><p>示意数据，仅用于说明形状差异。</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>08</span></div>
+  </section>
+
+  <!-- ========== 9 · timeline ========== -->
+  <section class="slide timeline">
+    <div class="slide-inner">
+      <div class="kicker">Pipeline</div>
+      <h2 class="h2" style="margin-top:16px;">一份稿子的生成顺序</h2>
+      <div class="track">
+        <div class="node"><div class="t">STEP 1</div><div class="h3">问清需求</div><p>主题、受众、页数、场景。缺一个就问。</p></div>
+        <div class="node"><div class="t">STEP 2</div><div class="h3">交出大纲</div><p>每页一行标题。等确认，不抢跑。</p></div>
+        <div class="node"><div class="t">STEP 3</div><div class="h3">选主题</div><p>按行业和场合定色，不按喜好。</p></div>
+        <div class="node"><div class="t">STEP 4</div><div class="h3">逐页写</div><p>一页一写，写完即验。</p></div>
+        <div class="node"><div class="t">STEP 5</div><div class="h3">自检交付</div><p>溢出、对比度、页数、口径。</p></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>09</span></div>
+  </section>
+
+  <!-- ========== 10 · quote ========== -->
+  <section class="slide quote">
+    <div class="glow" style="width:700px;height:700px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+    <div class="slide-inner">
+      <blockquote>如果你不能用一句话说清这页要讲什么，那这页就不该存在。</blockquote>
+      <cite>Barbara Minto · 金字塔原理</cite>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>10</span></div>
+  </section>
+
+  <!-- ========== 11 · table ========== -->
+  <section class="slide table">
+    <div class="slide-inner">
+      <div class="kicker">Reference</div>
+      <h2 class="h2" style="margin-top:16px;">版式速查</h2>
+      <table>
+        <thead><tr><th>你手上的内容</th><th>用这个版式</th><th>页数占比</th></tr></thead>
+        <tbody>
+          <tr><td>一个结论 + 三个理由</td><td>bullets 要点</td><td class="num">30%</td></tr>
+          <tr><td>两方对照、前后对比</td><td>columns 双栏</td><td class="num">15%</td></tr>
+          <tr><td>并列的模块或能力</td><td>cards 卡片</td><td class="num">15%</td></tr>
+          <tr><td>规模、增速、占比</td><td>stat 数据 / chart 图表</td><td class="num">20%</td></tr>
+          <tr><td>阶段、演化、排期</td><td>timeline 时间线</td><td class="num">10%</td></tr>
+          <tr><td>步骤、链路、分工</td><td>process 流程</td><td class="num">10%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>11</span></div>
+  </section>
+
+  <!-- ========== 12 · image ========== -->
+  <section class="slide image">
+    <div class="slide-inner">
+      <div class="kicker">Visual</div>
+      <h2 class="h2" style="margin-top:16px;">图不是装饰，是证据</h2>
+      <div class="split">
+        <div class="frame">把截图 / 照片 / 示意图放这里</div>
+        <div class="side">
+          <div class="item"><div class="h3">图必须自己会说话</div><p>去掉文字后，图还能传达信息，才值得占半页。</p></div>
+          <div class="item"><div class="h3">别用图填空</div><p>找不到合适的图，就用留白。留白比库存图高级。</p></div>
+          <div class="item"><div class="h3">统一处理</div><p>整份稿子的图用同一种圆角、同一种边框粗细。</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>12</span></div>
+  </section>
+
+  <!-- ========== 13 · process ========== -->
+  <section class="slide process">
+    <div class="slide-inner">
+      <div class="kicker">Workflow</div>
+      <h2 class="h2" style="margin-top:16px;">四步做完整份稿</h2>
+      <div class="flow">
+        <div class="step"><div class="n">01</div><div class="h3">定骨架</div><p>按版式占比排页序，先排结构再填内容。</p></div>
+        <div class="step"><div class="n">02</div><div class="h3">写标题</div><p>每一页一行观点句，读一遍像不像故事。</p></div>
+        <div class="step"><div class="n">03</div><div class="h3">填支撑</div><p>每条支撑控制在一句话，能用数字就用数字。</p></div>
+        <div class="step"><div class="n">04</div><div class="h3">验三道</div><p>溢出、对比度、口径。过不了就改。</p></div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>13</span></div>
+  </section>
+
+  <!-- ========== 14 · end ========== -->
+  <section class="slide end">
+    <div class="glow" style="width:640px;height:640px;right:-200px;bottom:-280px;"></div>
+    <div class="slide-inner">
+      <div class="kicker">Start</div>
+      <h1 class="h1" style="margin-top:20px;">现在，说你要做什么稿子</h1>
+      <p class="lead">告诉我四件事：讲给谁听、要多少页、什么场合、有没有现成材料。</p>
+      <div class="actions">
+        <div class="btn primary">主题 + 受众 + 页数</div>
+        <div class="btn ghost">先给我大纲</div>
+      </div>
+    </div>
+    <div class="slide-foot"><span>deck-craft</span><span>14 / 14</span></div>
+  </section>
+
+</div>
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="hud">
+  <button id="prev" title="上一页 ←">←</button>
+  <span class="count" id="count">1 / 14</span>
+  <button id="next" title="下一页 →">→</button>
+  <button id="full" title="全屏 F">⛶</button>
+</div>
+
+<script>
+/* deck-craft · 放映器
+   键盘：← → 空格 PageDown 翻页 / Home End 首尾 / F 全屏 / Esc 退出全屏
+   点击：右半屏下一页，左半屏上一页
+   URL：#3 可直接打开第 3 页 */
+(function () {
+  const deck = document.getElementById('deck');
+  if (!deck) return;
+  const slides = [...deck.querySelectorAll('.slide')];
+  if (!slides.length) return;
+
+  const count = document.getElementById('count');
+  const bar = document.getElementById('progress');
+  let i = slides.findIndex(s => s.classList.contains('on'));
+  if (i < 0) i = 0;
+
+  function fit() {
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('on', k === i));
+    if (count) count.textContent = (i + 1) + ' / ' + slides.length;
+    if (bar) bar.style.width = ((i + 1) / slides.length * 100) + '%';
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+  }
+
+  function toggleFull() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  }
+
+  addEventListener('resize', fit);
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'f' || e.key === 'F') toggleFull();
+    else if (e.key === 'Escape' && document.fullscreenElement) document.exitFullscreen?.();
+  });
+
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const full = document.getElementById('full');
+  if (prev) prev.onclick = () => show(i - 1);
+  if (next) next.onclick = () => show(i + 1);
+  if (full) full.onclick = toggleFull;
+
+  deck.addEventListener('click', e => {
+    if (e.target.closest('.hud')) return;
+    show(e.clientX > window.innerWidth / 2 ? i + 1 : i - 1);
+  });
+
+  const start = parseInt(location.hash.slice(1), 10);
+  fit();
+  show(Number.isFinite(start) ? start - 1 : i);
+})();
+
+</script>
+</body>
+</html>
