@@ -11,10 +11,10 @@
    ========================================================================== */
 
 :root {
-  /* 版式基准：所有坐标按 1280 × 720 写死，靠外层 scale 适配窗口 */
-  --w: 1280px;
-  --h: 720px;
-  --pad: 72px;
+  /* 版式基准：所有坐标按 1920 × 1080 写死，靠外层 scale 适配窗口 */
+  --w: 1920px;
+  --h: 1080px;
+  --pad: 96px;
 
   /* 字族 */
   --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
@@ -191,9 +191,9 @@
 </style>
 <style>
 /* ==========================================================================
-   deck-craft · 版式层
-   基准画布 1280 × 720。所有尺寸按像素写死，由 .deck 外层统一缩放。
-   一个 .slide 元素就是一页，它的第二个 class 决定版式。
+   deck-craft · 版式层 v2
+   画布 1920 × 1080（与 aippt 行业模板一致），由 .deck 外层统一缩放。
+   设计规则见 references/design-moves.md —— 一页少于 8 个层次就是素的。
    ========================================================================== */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -207,13 +207,7 @@ html, body {
   overflow: hidden;
 }
 
-/* --- 舞台：把 1280×720 居中缩放 ------------------------------------------- */
-.stage {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-}
+.stage { position: fixed; inset: 0; display: grid; place-items: center; }
 
 .deck {
   width: var(--w);
@@ -224,12 +218,9 @@ html, body {
   overflow: hidden;
 }
 
-/* --- 页 ------------------------------------------------------------------- */
 .slide {
-  position: absolute;
-  inset: 0;
-  width: var(--w);
-  height: var(--h);
+  position: absolute; inset: 0;
+  width: var(--w); height: var(--h);
   background: var(--bg);
   color: var(--fg);
   display: none;
@@ -238,483 +229,334 @@ html, body {
 }
 .slide.on { display: block; }
 
-.slide-inner {
-  position: absolute;
-  inset: 0;
-  padding: var(--pad);
-  display: flex;
-  flex-direction: column;
+/* ==========================================================================
+   通用零件
+   ========================================================================== */
+
+.topbar { position: absolute; left: 0; top: 0; width: 100%; height: 8px; display: flex; z-index: 20; }
+.topbar .a { width: 200px; background: var(--accent-2); }
+.topbar .b { flex: 1; background: var(--accent); }
+
+.eyebrow { position: absolute; left: 96px; top: 80px; display: flex; align-items: center; gap: 22px; z-index: 10; }
+.eyebrow .no { font-family: var(--mono); font-size: 26px; color: var(--accent); font-weight: 800; letter-spacing: 6px; }
+.eyebrow .dash { width: 40px; height: 2px; background: currentColor; opacity: .35; }
+.eyebrow .en { font-size: 22px; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; }
+
+.title { position: absolute; left: 96px; top: 122px; z-index: 10; font-size: 52px; font-weight: 800; color: var(--accent-2); letter-spacing: -1px; line-height: 1.15; }
+.title small { font-size: 32px; font-weight: 400; color: var(--fg-2); margin-left: 16px; letter-spacing: 0; }
+
+.dots { position: absolute; right: 96px; top: 98px; display: grid; grid-template-columns: repeat(5, 10px); gap: 14px; z-index: 10; }
+.dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); opacity: .38; }
+
+.bg-word {
+  position: absolute; right: 52px; top: 36px;
+  font-family: var(--mono);
+  font-size: 220px; font-weight: 900; line-height: 1; letter-spacing: -8px;
+  color: var(--fg); opacity: .055;
+  pointer-events: none; z-index: 0; white-space: nowrap;
 }
 
-/* 页脚：品牌 + 页码 */
-.slide-foot {
-  position: absolute;
-  left: var(--pad);
-  right: var(--pad);
-  bottom: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  letter-spacing: .06em;
-  color: var(--muted);
-  text-transform: uppercase;
+.divider-v { width: 2px; background: linear-gradient(180deg, transparent 0%, var(--accent) 20%, var(--accent) 80%, transparent 100%); opacity: .5; }
+.divider-h { height: 2px; background: linear-gradient(90deg, transparent 0%, var(--accent) 20%, var(--accent) 80%, transparent 100%); opacity: .5; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 14px 22px; border-radius: 30px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  backdrop-filter: blur(4px);
+  font-size: 22px; font-weight: 800; letter-spacing: 2px; color: var(--fg);
 }
 
-/* 细分割线 */
-.hr {
-  height: 1px;
-  background: var(--line);
-  width: 100%;
+.corner {
+  position: absolute; right: 0; bottom: 0; width: 220px; height: 76px;
+  background: var(--accent-2); z-index: 20;
+  display: flex; align-items: center; justify-content: flex-end; padding-right: 22px;
 }
+.corner div { text-align: right; line-height: 1.35; }
+.corner .n { font-size: 20px; color: #fff; letter-spacing: 5px; font-weight: 900; }
+.corner .t { font-size: 20px; color: var(--accent); letter-spacing: 3px; font-weight: 700; }
 
-/* 强调短杠 */
-.kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.kicker::before {
-  content: "";
-  width: 26px;
-  height: 2px;
-  background: var(--accent);
-}
+.source { position: absolute; left: 96px; bottom: 26px; font-size: 20px; color: var(--muted); letter-spacing: 2px; z-index: 10; display: flex; align-items: center; gap: 10px; }
+.source::before { content: ""; width: 12px; height: 12px; border: 2px solid var(--accent); border-radius: 3px; }
 
-/* 通用标题 */
-.h1 { font-size: 76px; line-height: 1.06; font-weight: 700; letter-spacing: -.02em; }
-.h2 { font-size: 44px; line-height: 1.18; font-weight: 700; letter-spacing: -.015em; }
-.h3 { font-size: 26px; line-height: 1.3; font-weight: 650; }
-.lead { font-size: 22px; line-height: 1.55; color: var(--fg-2); font-weight: 400; }
-.small { font-size: 16px; line-height: 1.5; color: var(--muted); }
-.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.pageno { position: absolute; right: 96px; bottom: 26px; font-family: var(--mono); font-size: 20px; color: var(--muted); letter-spacing: 3px; z-index: 10; }
 
-/* 背景装饰：光照 + 网格 */
-.glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  background: var(--glow);
-  pointer-events: none;
-  z-index: 0;
-}
-.grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 80px 80px;
-  opacity: .35;
-  mask-image: radial-gradient(ellipse at 50% 40%, #000 0%, transparent 72%);
-  z-index: 0;
-}
-.slide-inner > * { position: relative; z-index: 1; }
+em.hl { font-style: normal; color: var(--accent); }
 
 /* ==========================================================================
    1 · cover 封面
    ========================================================================== */
-.cover .slide-inner { justify-content: flex-end; padding-bottom: 96px; }
-.cover .eyebrow {
-  font-size: 15px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 22px;
+.cover { background: var(--bg-2); }
+.cover .bg-img {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(1200px 800px at 78% 30%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%),
+    linear-gradient(135deg, var(--bg-2) 0%, var(--bg) 100%);
 }
-.cover .h1 { font-size: 82px; max-width: 15ch; }
-.cover .lead { margin-top: 24px; max-width: 46ch; font-size: 24px; }
-.cover .meta {
-  margin-top: 52px;
-  display: flex;
-  gap: 44px;
-  font-size: 15px;
-  color: var(--muted);
-  letter-spacing: .04em;
+.cover .mask {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--accent-2) 24%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 40%, transparent) 100%);
 }
-.cover .meta b { color: var(--fg-2); font-weight: 600; display: block; margin-top: 6px; font-size: 17px; }
-.cover .accent-bar {
-  position: absolute;
-  left: 0; top: 0;
-  width: 6px;
-  height: 190px;
-  background: var(--grad);
-  z-index: 2;
+.cover .slice {
+  position: absolute; inset: 0; z-index: 3;
+  clip-path: polygon(0 0, 1180px 0, 830px 1080px, 0 1080px);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--accent) 68%, var(--bg)) 0%,
+    color-mix(in srgb, var(--accent-2) 78%, var(--bg)) 48%,
+    var(--bg-2) 100%);
 }
+.cover svg.rays { position: absolute; left: 0; top: 0; z-index: 4; pointer-events: none; }
+
+.cover .brand { position: absolute; right: 100px; top: 76px; z-index: 10; display: flex; align-items: center; gap: 14px; }
+.cover .brand .mark { width: 30px; height: 32px; border: 3px solid #fff; border-radius: 3px; position: relative; }
+.cover .brand .mark::after { content: ""; position: absolute; left: 5px; top: 5px; width: 3px; height: 14px; background: var(--accent); box-shadow: 8px 4px 0 0 var(--accent), 16px 0 0 0 var(--accent); }
+.cover .brand .name { font-size: 20px; color: #fff; font-weight: 900; letter-spacing: 6px; }
+
+.cover .tag { position: absolute; left: 80px; top: 150px; z-index: 10; display: flex; align-items: center; gap: 18px; }
+.cover .tag .sq { width: 20px; height: 20px; background: var(--accent); }
+.cover .tag .txt { font-size: 22px; color: var(--accent); font-weight: 800; letter-spacing: 6px; }
+
+.cover h1 {
+  position: absolute; left: 80px; top: 328px; z-index: 10;
+  font-size: 120px; font-weight: 900; letter-spacing: 2px; line-height: 1;
+  color: #fff; white-space: nowrap;
+}
+.cover .rule { position: absolute; left: 84px; top: 502px; z-index: 10; display: flex; align-items: center; gap: 12px; }
+.cover .rule .l { width: 90px; height: 5px; background: var(--accent); }
+.cover .rule .d { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+.cover .rule .s { width: 26px; height: 2px; background: color-mix(in srgb, var(--accent) 50%, transparent); }
+.cover .sub-en { position: absolute; left: 84px; top: 546px; z-index: 10; font-size: 34px; font-weight: 300; letter-spacing: 6px; color: color-mix(in srgb, #fff 85%, transparent); font-family: var(--mono); }
+.cover .sub-cn { position: absolute; left: 84px; top: 604px; z-index: 10; font-size: 20px; font-weight: 500; letter-spacing: 4px; color: color-mix(in srgb, var(--accent) 45%, #fff); }
+.cover .reporter { position: absolute; left: 84px; top: 702px; z-index: 10; display: flex; align-items: center; gap: 18px; }
+.cover .reporter .sq { width: 20px; height: 20px; background: var(--accent); }
+.cover .reporter .txt { font-size: 22px; color: color-mix(in srgb, #fff 75%, transparent); font-weight: 500; letter-spacing: 4px; }
+.cover .reporter .txt b { color: #fff; font-weight: 700; }
+.cover .desc { position: absolute; left: 84px; bottom: 112px; z-index: 10; font-size: 20px; line-height: 1.9; letter-spacing: 3px; color: color-mix(in srgb, #fff 52%, transparent); max-width: 700px; }
+.cover .date { position: absolute; left: 84px; bottom: 56px; z-index: 10; display: flex; align-items: center; gap: 20px; }
+.cover .date .k { font-size: 20px; font-weight: 800; letter-spacing: 5px; color: color-mix(in srgb, var(--accent) 40%, #fff); }
+.cover .date .d { width: 16px; height: 1px; background: color-mix(in srgb, var(--accent) 40%, #fff); }
+.cover .date .v { font-size: 20px; font-weight: 600; letter-spacing: 4px; color: color-mix(in srgb, #fff 70%, transparent); }
+.cover .mark3 { position: absolute; right: 100px; bottom: 96px; z-index: 10; text-align: right; }
+.cover .mark3 .a { font-size: 20px; color: var(--accent); font-weight: 800; letter-spacing: 6px; margin-bottom: 10px; }
+.cover .mark3 .b { font-size: 22px; color: #fff; font-weight: 800; letter-spacing: 6px; }
 
 /* ==========================================================================
    2 · agenda 目录
    ========================================================================== */
-.agenda .slide-inner { justify-content: center; }
-.agenda .list { margin-top: 44px; display: flex; flex-direction: column; }
+.agenda .list { position: absolute; left: 96px; top: 300px; width: 1728px; z-index: 10; }
 .agenda .row {
-  display: grid;
-  grid-template-columns: 76px 1fr auto;
-  align-items: baseline;
-  gap: 28px;
-  padding: 21px 0;
-  border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 120px 1fr 380px; align-items: baseline; gap: 40px;
+  padding: 32px 0; border-top: 1px solid var(--line);
 }
 .agenda .row:last-child { border-bottom: 1px solid var(--line); }
-.agenda .idx {
-  font-family: var(--mono);
-  font-size: 15px;
-  color: var(--accent);
-  letter-spacing: .1em;
-}
-.agenda .row .h3 { font-size: 27px; font-weight: 600; }
-.agenda .row small { font-size: 15px; color: var(--muted); }
+.agenda .row .no { font-family: var(--mono); font-size: 26px; color: var(--accent); font-weight: 800; letter-spacing: 2px; }
+.agenda .row .h { font-size: 40px; font-weight: 700; color: var(--fg); letter-spacing: -.5px; }
+.agenda .row .d { font-size: 22px; color: var(--muted); letter-spacing: 1px; text-align: right; }
 
 /* ==========================================================================
-   3 · section 章节分隔
+   3 · section 章节
    ========================================================================== */
 .section { background: var(--bg-2); }
-.section .slide-inner { justify-content: center; }
-.section .big-num {
-  font-family: var(--mono);
-  font-size: 200px;
-  line-height: .82;
-  font-weight: 700;
-  color: transparent;
-  -webkit-text-stroke: 2px var(--accent);
-  opacity: .5;
-  margin-bottom: -34px;
+.section .bigno {
+  position: absolute; left: 96px; top: 170px; z-index: 10;
+  font-family: var(--mono); font-size: 380px; font-weight: 900; line-height: .82;
+  color: transparent; -webkit-text-stroke: 3px var(--accent); opacity: .42;
 }
-.section .h1 { font-size: 62px; }
-.section .lead { margin-top: 20px; max-width: 44ch; }
+.section .slice { position: absolute; right: 0; top: 0; width: 760px; height: 1080px; z-index: 1;
+  clip-path: polygon(300px 0, 100% 0, 100% 100%, 0 100%);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 20%, transparent), transparent 70%);
+}
+.section .rule { position: absolute; left: 96px; top: 620px; z-index: 10; width: 140px; height: 4px; background: var(--accent); }
+.section h1 { position: absolute; left: 96px; top: 660px; z-index: 10; font-size: 92px; font-weight: 900; letter-spacing: -2px; color: var(--fg); line-height: 1.1; max-width: 1200px; }
+.section .lead { position: absolute; left: 96px; top: 820px; z-index: 10; font-size: 28px; line-height: 1.6; color: var(--fg-2); max-width: 1100px; letter-spacing: 1px; }
 
 /* ==========================================================================
    4 · bullets 要点
    ========================================================================== */
-.bullets .slide-inner { justify-content: center; }
-.bullets .body { margin-top: 46px; display: flex; flex-direction: column; gap: 30px; }
-.bullets .item { display: grid; grid-template-columns: 40px 1fr; gap: 22px; align-items: start; }
-.bullets .dot {
-  width: 12px; height: 12px;
-  margin-top: 13px;
-  border-radius: 3px;
-  background: var(--accent);
-  transform: rotate(45deg);
-}
-.bullets .item .h3 { font-size: 25px; margin-bottom: 7px; }
-.bullets .item p { font-size: 19px; line-height: 1.55; color: var(--muted); max-width: 68ch; }
+.bullets .list { position: absolute; left: 96px; top: 310px; width: 1330px; z-index: 10; display: flex; flex-direction: column; gap: 56px; }
+.bullets .item { display: grid; grid-template-columns: 56px 1fr; gap: 32px; align-items: start; }
+.bullets .item .mk { width: 16px; height: 16px; margin-top: 16px; background: var(--accent); transform: rotate(45deg); }
+.bullets .item .h { font-size: 38px; font-weight: 700; color: var(--fg); margin-bottom: 12px; letter-spacing: -.3px; }
+.bullets .item p { font-size: 24px; line-height: 1.6; color: var(--muted); max-width: 1080px; }
+.bullets .rail { position: absolute; right: 96px; top: 310px; height: 470px; width: 2px;
+  background: linear-gradient(180deg, transparent, var(--accent) 20%, var(--accent) 80%, transparent); opacity: .5; }
+.bullets .note { position: absolute; right: 130px; top: 310px; width: 280px; font-size: 22px; line-height: 1.7; color: var(--muted); letter-spacing: 2px; z-index: 10; }
 
 /* ==========================================================================
    5 · columns 双栏
    ========================================================================== */
-.columns .slide-inner { justify-content: center; }
-.columns .cols { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
-.columns .col h4 {
-  font-size: 15px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 16px;
-  font-weight: 600;
-}
-.columns .col p, .columns .col li { font-size: 19px; line-height: 1.62; color: var(--fg-2); }
-.columns .col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.columns .col li::before { content: "—"; color: var(--muted); margin-right: 12px; }
+.columns .cols { position: absolute; left: 96px; top: 310px; width: 1728px; display: grid; grid-template-columns: 1fr 80px 1fr; gap: 30px; z-index: 10; }
+.columns .col .h4 { font-size: 20px; font-weight: 800; letter-spacing: 5px; color: var(--accent); margin-bottom: 24px; text-transform: uppercase; }
+.columns .col ul { list-style: none; display: flex; flex-direction: column; gap: 26px; }
+.columns .col li { font-size: 28px; line-height: 1.5; color: var(--fg-2); padding-left: 26px; position: relative; letter-spacing: .5px; }
+.columns .col li::before { content: ""; position: absolute; left: 0; top: 17px; width: 10px; height: 2px; background: var(--muted); }
+.columns .mid { height: 480px; align-self: center; }
 
 /* ==========================================================================
-   6 · cards 卡片组（3 或 6 张）
+   6 · cards 卡片
    ========================================================================== */
-.cards .slide-inner { justify-content: center; }
-.cards .grid { margin-top: 44px; display: grid; gap: 20px; }
+.cards .grid { position: absolute; left: 96px; top: 310px; width: 1728px; display: grid; gap: 28px; z-index: 10; }
 .cards[data-n="3"] .grid { grid-template-columns: repeat(3, 1fr); }
 .cards[data-n="4"] .grid { grid-template-columns: repeat(4, 1fr); }
 .cards[data-n="6"] .grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); }
-.cards .c {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 26px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 152px;
-}
-.cards .c .ico {
-  width: 34px; height: 34px;
-  border-radius: 9px;
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-  display: grid; place-items: center;
-  font-size: 17px;
-  color: var(--accent);
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.cards .c .h3 { font-size: 20px; }
-.cards .c p { font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+.cards .c { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 40px 36px; min-height: 300px; position: relative; overflow: hidden; }
+.cards .c::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 5px; background: var(--accent); opacity: .85; }
+.cards .c .ico { width: 58px; height: 58px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 15%, transparent); display: grid; place-items: center; font-size: 26px; font-weight: 900; color: var(--accent); margin-bottom: 26px; font-family: var(--mono); }
+.cards .c .h { font-size: 32px; font-weight: 700; color: var(--fg); margin-bottom: 14px; letter-spacing: -.3px; }
+.cards .c p { font-size: 22px; line-height: 1.6; color: var(--muted); }
 
 /* ==========================================================================
-   7 · stat 数据大字
+   7 · stat 数据
    ========================================================================== */
-.stat .slide-inner { justify-content: center; }
-.stat .row { margin-top: 52px; display: grid; gap: 34px; }
-.stat[data-n="1"] .row { grid-template-columns: 1fr; }
-.stat[data-n="2"] .row { grid-template-columns: repeat(2, 1fr); }
-.stat[data-n="3"] .row { grid-template-columns: repeat(3, 1fr); }
-.stat .s { border-left: 2px solid var(--line); padding-left: 26px; }
-.stat .s:first-child { border-left-color: var(--accent); }
-.stat .v {
-  font-family: var(--mono);
-  font-size: 82px;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: -.03em;
-  color: var(--fg);
+.stat .banner { position: absolute; left: 96px; top: 220px; width: 1728px; height: 340px; border-radius: 12px; overflow: hidden; z-index: 5; }
+.stat .banner .bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(900px 520px at 82% 18%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 70%),
+    linear-gradient(135deg, var(--accent-2) 0%, color-mix(in srgb, var(--accent-2) 55%, var(--bg)) 100%);
 }
-.stat .v em { font-size: .42em; font-style: normal; color: var(--accent); margin-left: 4px; }
-.stat .k { margin-top: 14px; font-size: 17px; color: var(--muted); line-height: 1.45; }
+.stat .banner .mask { position: absolute; inset: 0; background: linear-gradient(90deg, color-mix(in srgb, var(--accent-2) 90%, transparent) 0%, color-mix(in srgb, var(--accent-2) 55%, transparent) 55%, transparent 100%); }
+.stat .banner .inner { position: absolute; left: 48px; top: 44px; z-index: 2; }
+.stat .banner .kick { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.stat .banner .kick i { width: 52px; height: 3px; background: var(--accent); display: block; }
+.stat .banner .kick span { font-size: 22px; color: var(--accent); font-weight: 900; letter-spacing: 6px; }
+.stat .banner .big { font-size: 80px; font-weight: 900; line-height: 1.1; letter-spacing: -1px; color: #fff; }
+.stat .banner .note { margin-top: 20px; font-size: 24px; color: color-mix(in srgb, #fff 88%, transparent); letter-spacing: 2px; line-height: 1.5; max-width: 1080px; }
+.stat .banner .ghost { position: absolute; right: 52px; top: 26px; font-family: var(--mono); font-size: 220px; font-weight: 900; line-height: 1; letter-spacing: -8px; color: rgba(255,255,255,.12); z-index: 1; }
+.stat .banner .pill { position: absolute; right: 60px; bottom: 34px; z-index: 3; color: #fff; }
+
+.stat .kpis { position: absolute; left: 96px; top: 606px; width: 1728px; display: flex; align-items: flex-end; z-index: 10; }
+.stat .k { flex: 1; padding: 0 22px; }
+.stat .k .en { font-size: 20px; color: var(--muted); letter-spacing: 4px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; }
+.stat .k .cn { font-size: 22px; color: var(--accent-2); font-weight: 800; letter-spacing: 3px; margin-bottom: 18px; }
+.stat .k .v { display: flex; align-items: baseline; gap: 6px; }
+.stat .k .v b { font-family: var(--mono); font-size: 108px; font-weight: 900; line-height: 1; letter-spacing: -3px; color: var(--accent-2); }
+.stat .k .v i { font-style: normal; font-size: 32px; font-weight: 700; color: var(--accent-2); }
+.stat .k .delta { margin-top: 16px; font-size: 22px; font-weight: 800; letter-spacing: 1px; color: var(--accent); }
+.stat .k .delta::before { content: "↗"; margin-right: 8px; }
+
+.stat .prog { position: absolute; left: 96px; top: 916px; width: 1580px; z-index: 10; }
+.stat .prog .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.stat .prog .head .l { font-size: 22px; color: var(--accent-2); font-weight: 800; letter-spacing: 3px; }
+.stat .prog .head .r { font-size: 20px; color: var(--accent); font-weight: 800; letter-spacing: 2px; }
+.stat .prog .bar { width: 100%; height: 16px; background: color-mix(in srgb, var(--accent) 12%, transparent); border-radius: 8px; position: relative; }
+.stat .prog .fill { width: 68%; height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
+.stat .prog .mk { position: absolute; left: calc(68% - 1.5px); top: -6px; width: 3px; height: 28px; background: var(--accent-2); }
+.stat .prog .ticks { display: flex; justify-content: space-between; margin-top: 10px; font-size: 20px; color: var(--muted); letter-spacing: 2px; }
 
 /* ==========================================================================
-   8 · chart 图表（纯 CSS/SVG 条形与折线）
+   8 · chart 图表
    ========================================================================== */
-.chart .slide-inner { justify-content: center; }
-.chart .wrap { margin-top: 40px; display: grid; grid-template-columns: 1fr 340px; gap: 56px; align-items: end; }
-.chart .bars { display: flex; align-items: flex-end; gap: 26px; height: 300px; border-bottom: 1px solid var(--line); padding-bottom: 0; }
-.chart .bar { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 10px; height: 100%; }
-.chart .bar i {
-  display: block;
-  width: 100%;
-  border-radius: 6px 6px 0 0;
-  background: var(--grad);
-  opacity: .9;
-}
-.chart .bar.alt i { background: var(--card); border: 1px solid var(--line); }
-.chart .bar span { font-size: 13px; color: var(--muted); letter-spacing: .04em; }
-.chart .bar b { font-family: var(--mono); font-size: 16px; color: var(--fg-2); }
-.chart .legend { display: flex; flex-direction: column; gap: 16px; padding-bottom: 30px; }
-.chart .lg { display: flex; gap: 12px; align-items: flex-start; }
-.chart .lg i { width: 10px; height: 10px; border-radius: 2px; background: var(--accent); margin-top: 6px; flex: none; }
-.chart .lg p { font-size: 15px; line-height: 1.5; color: var(--muted); }
+.chart .wrap { position: absolute; left: 96px; top: 310px; width: 1728px; display: grid; grid-template-columns: 1fr 460px; gap: 70px; align-items: end; z-index: 10; }
+.chart .plot { height: 460px; display: flex; align-items: flex-end; gap: 34px; border-bottom: 2px solid var(--line); position: relative; }
+.chart .bar { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 12px; height: 100%; }
+.chart .bar i { display: block; width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 50%, transparent)); }
+.chart .bar.alt i { background: color-mix(in srgb, var(--accent) 16%, transparent); border: 1px solid var(--line); }
+.chart .bar b { font-family: var(--mono); font-size: 24px; color: var(--fg); font-weight: 800; }
+.chart .bar span { font-size: 20px; color: var(--muted); letter-spacing: 1px; }
+.chart .legend { display: flex; flex-direction: column; gap: 26px; padding-bottom: 60px; }
+.chart .lg { display: flex; gap: 16px; align-items: flex-start; }
+.chart .lg i { width: 12px; height: 12px; border-radius: 2px; background: var(--accent); margin-top: 8px; flex: none; }
+.chart .lg p { font-size: 22px; line-height: 1.55; color: var(--muted); }
 
 /* ==========================================================================
    9 · timeline 时间线
    ========================================================================== */
-.timeline .slide-inner { justify-content: center; }
-.timeline .track {
-  margin-top: 60px;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  gap: 0;
-  position: relative;
-}
-.timeline .track::before {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; top: 47px;
-  height: 1px;
-  background: var(--line);
-}
-.timeline .node { position: relative; padding-right: 26px; }
-.timeline .node::before {
-  content: "";
-  position: absolute;
-  top: 41px; left: 0;
-  width: 13px; height: 13px;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 2px solid var(--accent);
-  z-index: 1;
-}
-.timeline .node .t { font-family: var(--mono); font-size: 14px; color: var(--accent); letter-spacing: .08em; margin-bottom: 64px; }
-.timeline .node .h3 { font-size: 19px; margin-bottom: 8px; }
-.timeline .node p { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.timeline .track { position: absolute; left: 96px; top: 430px; width: 1728px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; z-index: 10; }
+.timeline .track::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--line); }
+.timeline .node { position: relative; padding: 62px 30px 0 0; }
+.timeline .node::before { content: ""; position: absolute; top: -14px; left: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--bg); border: 4px solid var(--accent); z-index: 2; }
+.timeline .node .t { font-family: var(--mono); font-size: 22px; color: var(--accent); letter-spacing: 2px; margin-bottom: 18px; font-weight: 800; }
+.timeline .node .h { font-size: 30px; font-weight: 700; color: var(--fg); margin-bottom: 12px; }
+.timeline .node p { font-size: 21px; line-height: 1.6; color: var(--muted); }
 
 /* ==========================================================================
    10 · quote 引用
    ========================================================================== */
-.quote .slide-inner { justify-content: center; align-items: center; text-align: center; }
-.quote blockquote {
-  font-family: var(--serif);
-  font-size: 50px;
-  line-height: 1.34;
-  font-weight: 600;
-  max-width: 24ch;
-  letter-spacing: -.01em;
-}
-.quote blockquote::before { content: "“"; color: var(--accent); }
-.quote blockquote::after { content: "”"; color: var(--accent); }
-.quote cite {
-  margin-top: 40px;
-  font-style: normal;
-  font-size: 16px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+.quote .mark { position: absolute; left: 86px; top: 120px; font-family: var(--serif); font-size: 340px; line-height: .8; color: var(--accent); opacity: .15; z-index: 1; }
+.quote blockquote { position: absolute; left: 96px; top: 380px; width: 1520px; z-index: 10; font-family: var(--serif); font-size: 66px; line-height: 1.42; font-weight: 600; letter-spacing: -.5px; color: var(--fg); }
+.quote .rule { position: absolute; left: 96px; top: 770px; width: 160px; height: 4px; background: var(--accent); z-index: 10; }
+.quote cite { position: absolute; left: 96px; top: 812px; z-index: 10; font-style: normal; font-size: 26px; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; }
 
 /* ==========================================================================
    11 · table 表格
    ========================================================================== */
-.table .slide-inner { justify-content: center; }
-.table table { margin-top: 40px; width: 100%; border-collapse: collapse; }
-.table th {
-  text-align: left;
-  font-size: 14px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-weight: 600;
-  padding: 0 20px 14px 0;
-  border-bottom: 1px solid var(--line);
-}
-.table td {
-  font-size: 18px;
-  padding: 19px 20px 19px 0;
-  border-bottom: 1px solid var(--line);
-  color: var(--fg-2);
-  line-height: 1.4;
-}
+.table table { position: absolute; left: 96px; top: 300px; width: 1600px; border-collapse: collapse; z-index: 10; }
+.table th { text-align: left; font-size: 20px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); font-weight: 800; padding: 0 28px 20px 0; border-bottom: 2px solid var(--accent); }
+.table td { font-size: 26px; padding: 30px 28px 30px 0; border-bottom: 1px solid var(--line); color: var(--fg-2); line-height: 1.4; }
 .table tr:last-child td { border-bottom: none; }
-.table td:first-child { color: var(--fg); font-weight: 600; }
-.table td .num { color: var(--accent); }
+.table td:first-child { color: var(--fg); font-weight: 700; }
+.table td .num { font-family: var(--mono); color: var(--accent); font-weight: 800; }
 
 /* ==========================================================================
    12 · image 图文
    ========================================================================== */
-.image .slide-inner { justify-content: center; }
-.image .split { margin-top: 36px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 52px; align-items: center; flex: 1; }
-.image .frame {
-  height: 100%;
-  min-height: 340px;
-  border-radius: 16px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  overflow: hidden;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-  font-size: 14px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
+.image .split { position: absolute; left: 96px; top: 300px; width: 1728px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 70px; align-items: stretch; z-index: 10; }
+.image .frame { min-height: 570px; border-radius: 16px; border: 1px solid var(--line); overflow: hidden; position: relative;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, transparent), color-mix(in srgb, var(--bg-2) 85%, transparent)); }
 .image .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.image .side { display: flex; flex-direction: column; gap: 22px; }
-.image .side .item { padding-left: 18px; border-left: 2px solid var(--line); }
+.image .frame .ph { position: absolute; inset: 0; display: grid; place-items: center; font-size: 20px; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; }
+.image .side { display: flex; flex-direction: column; justify-content: center; gap: 40px; }
+.image .side .item { padding-left: 26px; border-left: 3px solid var(--line); }
 .image .side .item:first-child { border-left-color: var(--accent); }
-.image .side .h3 { font-size: 19px; margin-bottom: 6px; }
-.image .side p { font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+.image .side .h { font-size: 30px; font-weight: 700; color: var(--fg); margin-bottom: 10px; }
+.image .side p { font-size: 22px; line-height: 1.6; color: var(--muted); }
 
 /* ==========================================================================
-   13 · process 流程步骤
+   13 · process 流程
    ========================================================================== */
-.process .slide-inner { justify-content: center; }
-.process .flow { margin-top: 52px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px; }
-.process .step {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 24px 22px;
-  position: relative;
-}
-.process .step .n {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--accent);
-  letter-spacing: .1em;
-  margin-bottom: 14px;
-}
-.process .step .h3 { font-size: 18px; margin-bottom: 8px; }
-.process .step p { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
-.process .step::after {
-  content: "→";
-  position: absolute;
-  right: -13px; top: 50%;
-  transform: translateY(-50%);
-  color: var(--muted);
-  font-size: 15px;
-  z-index: 2;
-}
+.process .flow { position: absolute; left: 96px; top: 340px; width: 1728px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 34px; z-index: 10; }
+.process .step { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 40px 32px; position: relative; min-height: 330px; }
+.process .step .n { font-family: var(--mono); font-size: 22px; color: var(--accent); letter-spacing: 3px; margin-bottom: 24px; font-weight: 800; }
+.process .step .h { font-size: 30px; font-weight: 700; color: var(--fg); margin-bottom: 14px; }
+.process .step p { font-size: 21px; line-height: 1.6; color: var(--muted); }
+.process .step::after { content: ""; position: absolute; right: -26px; top: 50%; width: 18px; height: 2px; background: var(--accent); opacity: .6; }
 .process .step:last-child::after { content: none; }
 
 /* ==========================================================================
    14 · end 结尾
    ========================================================================== */
 .end { background: var(--bg-2); }
-.end .slide-inner { justify-content: center; align-items: flex-start; }
-.end .h1 { font-size: 68px; max-width: 18ch; }
-.end .lead { margin-top: 26px; max-width: 46ch; }
-.end .actions { margin-top: 54px; display: flex; gap: 14px; }
-.end .btn {
-  padding: 15px 30px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: .02em;
-}
-.end .btn.primary { background: var(--grad); color: var(--accent-fg); }
+.end .slice { position: absolute; right: -220px; bottom: -320px; width: 1100px; height: 1100px; border-radius: 50%; z-index: 1;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 24%, transparent), transparent 68%); }
+.end .rule { position: absolute; left: 96px; top: 292px; width: 120px; height: 4px; background: var(--accent); z-index: 10; }
+.end h1 { position: absolute; left: 96px; top: 336px; z-index: 10; font-size: 100px; font-weight: 900; line-height: 1.14; letter-spacing: -2px; color: var(--fg); max-width: 1320px; }
+.end .lead { position: absolute; left: 96px; top: 630px; z-index: 10; font-size: 30px; line-height: 1.6; color: var(--fg-2); max-width: 1100px; }
+.end .actions { position: absolute; left: 96px; top: 770px; z-index: 10; display: flex; gap: 20px; }
+.end .btn { padding: 22px 44px; border-radius: 10px; font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+.end .btn.primary { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: var(--accent-fg); }
 .end .btn.ghost { border: 1px solid var(--line); color: var(--fg-2); }
 
 /* ==========================================================================
-   放映控件（仅编辑态可见）
+   放映控件
    ========================================================================== */
 .hud {
-  position: fixed;
-  bottom: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 9px 16px;
-  border-radius: 999px;
-  background: rgba(12, 12, 16, .78);
-  border: 1px solid rgba(255, 255, 255, .12);
-  backdrop-filter: blur(14px);
-  color: #eae6f2;
-  font: 500 12px/1 var(--sans);
-  letter-spacing: .06em;
-  z-index: 100;
-  transition: opacity .3s var(--ease);
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 14px; padding: 9px 16px;
+  border-radius: 999px; background: rgba(12,12,16,.78);
+  border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(14px);
+  color: #eae6f2; font: 500 12px/1 var(--sans); letter-spacing: .06em;
+  z-index: 100; transition: opacity .3s var(--ease);
 }
-.hud button {
-  all: unset;
-  cursor: pointer;
-  padding: 5px 9px;
-  border-radius: 6px;
-  color: inherit;
-  transition: background .15s;
-}
-.hud button:hover { background: rgba(255, 255, 255, .12); }
+.hud button { all: unset; cursor: pointer; padding: 5px 9px; border-radius: 6px; color: inherit; transition: background .15s; }
+.hud button:hover { background: rgba(255,255,255,.12); }
 .hud .count { font-family: var(--mono); opacity: .75; }
 body.playing .hud { opacity: 0; pointer-events: none; }
 
-/* 进度条 */
-.progress {
-  position: fixed;
-  left: 0; top: 0;
-  height: 2px;
-  background: var(--grad);
-  z-index: 101;
-  transition: width .32s var(--ease);
-}
-body.playing .progress { opacity: .8; }
+.progress { position: fixed; left: 0; top: 0; height: 2px; background: var(--grad); z-index: 101; transition: width .32s var(--ease); }
 
 /* ==========================================================================
-   打印：每页一张 16:9
+   打印
    ========================================================================== */
 @media print {
-  @page { size: 1280px 720px; margin: 0; }
+  @page { size: 1920px 1080px; margin: 0; }
   html, body { overflow: visible; background: #fff; }
   .stage { position: static; display: block; }
   .deck { transform: none !important; }
-  .slide {
-    display: block !important;
-    position: relative;
-    inset: auto;
-    break-after: page;
-    page-break-after: always;
-  }
+  .slide { display: block !important; position: relative; inset: auto; break-after: page; page-break-after: always; }
   .slide:last-child { break-after: auto; }
   .hud, .progress { display: none !important; }
 }
@@ -728,243 +570,313 @@ body.playing .progress { opacity: .8; }
 
   <!-- ========== 1 · cover ========== -->
   <section class="slide cover on">
-    <div class="glow" style="width:640px;height:640px;left:-160px;top:-260px;"></div>
-    <div class="accent-bar"></div>
-    <div class="slide-inner">
-      <div class="eyebrow">Deck Craft · 使用说明</div>
-      <h1 class="h1">怎么做出<br>一份好演示稿</h1>
-      <p class="lead">一页只讲一件事。先确认再动手。数据不编造。这三条做到了，剩下的只是手艺。</p>
-      <div class="meta">
-        <div>版本<b>v1.0</b></div>
-        <div>页数<b>14</b></div>
-        <div>版式<b>14 种</b></div>
-      </div>
-    </div>
-    <div class="slide-foot"><span>deck-craft</span><span>01</span></div>
+    <div class="bg-img"></div>
+    <div class="mask"></div>
+    <div class="slice"></div>
+    <svg class="rays" width="1920" height="1080" viewBox="0 0 1920 1080">
+      <line x1="1180" y1="0" x2="830" y2="1080" stroke="#9e57fa" stroke-width="8"/>
+      <line x1="1220" y1="0" x2="870" y2="1080" stroke="rgba(158,87,250,.35)" stroke-width="3"/>
+      <line x1="1260" y1="0" x2="910" y2="1080" stroke="rgba(158,87,250,.15)" stroke-width="2"/>
+      <circle cx="1180" cy="0" r="10" fill="#9e57fa"/>
+      <circle cx="830" cy="1080" r="10" fill="#9e57fa"/>
+    </svg>
+    <div class="brand"><div class="mark"></div><div class="name">DECK CRAFT</div></div>
+    <div class="tag"><div class="sq"></div><div class="txt">NO. 01 / COVER PAGE</div></div>
+    <h1>怎么做出好演示<span class="hl">稿.</span></h1>
+    <div class="rule"><div class="l"></div><div class="d"></div><div class="s"></div></div>
+    <div class="sub-en">HOW TO BUILD A DECK</div>
+    <div class="sub-cn">一页一观点 · 不编造数据 · 先确认再动手</div>
+    <div class="reporter"><div class="sq"></div><div class="txt">WRITER / <b>deck-craft</b></div></div>
+    <div class="desc">Three rules decide whether a deck works.<br>Layout only decides where things sit.</div>
+    <div class="date"><div class="k">VERSION</div><div class="d"></div><div class="v">v2.0 &nbsp;|&nbsp; 14 LAYOUTS</div></div>
+    <div class="mark3"><div class="a">THINK · WRITE · CUT</div><div class="b">想清楚 · 写出来 · 删干净</div></div>
   </section>
 
   <!-- ========== 2 · agenda ========== -->
   <section class="slide agenda">
-    <div class="glow" style="width:520px;height:520px;right:-180px;top:-160px;"></div>
-    <div class="slide-inner">
-      <div class="kicker">Agenda</div>
-      <h2 class="h2" style="margin-top:16px;">这份稿子讲五件事</h2>
-      <div class="list">
-        <div class="row"><span class="idx">01</span><span class="h3">先想清楚给谁看</span><small>受众决定信息密度</small></div>
-        <div class="row"><span class="idx">02</span><span class="h3">一页一个观点</span><small>观点是标题，不是分类</small></div>
-        <div class="row"><span class="idx">03</span><span class="h3">选对版式</span><small>内容是形状，版式是容器</small></div>
-        <div class="row"><span class="idx">04</span><span class="h3">让数字说话</span><small>数据优先图表化</small></div>
-        <div class="row"><span class="idx">05</span><span class="h3">交付与放映</span><small>单文件，双击就能放</small></div>
-      </div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">02</span><span class="dash"></span><span class="en">Contents</span></div>
+    <h2 class="title">这份稿子讲五件事 <small>/ 从受众到交付</small></h2>
+    <div class="dots">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>02</span></div>
+    <div class="list">
+      <div class="row"><span class="no">01</span><span class="h">先想清楚给谁看</span><span class="d">受众决定信息密度</span></div>
+      <div class="row"><span class="no">02</span><span class="h">一页只讲一个观点</span><span class="d">标题是判断，不是分类</span></div>
+      <div class="row"><span class="no">03</span><span class="h">选对版式</span><span class="d">内容是形状，版式是容器</span></div>
+      <div class="row"><span class="no">04</span><span class="h">让数字说话</span><span class="d">数据优先图表化</span></div>
+      <div class="row"><span class="no">05</span><span class="h">交付与放映</span><span class="d">单文件，双击就能放</span></div>
+    </div>
+    <div class="pageno">02</div>
   </section>
 
   <!-- ========== 3 · section ========== -->
   <section class="slide section">
-    <div class="slide-inner">
-      <div class="big-num">01</div>
-      <h1 class="h1">先想清楚给谁看</h1>
-      <p class="lead">同一份内容，给投资人看和给技术团队看，是两份完全不同的稿子。</p>
-    </div>
-    <div class="slide-foot"><span>受众</span><span>03</span></div>
+    <div class="slice"></div>
+    <div class="bigno">01</div>
+    <div class="rule"></div>
+    <h1>先想清楚给谁看</h1>
+    <p class="lead">同一份内容，给投资人看和给技术团队看，是两份完全不同的稿子。受众一变，页数、密度、语气、该删的页，全都变。</p>
+    <div class="pageno">03</div>
   </section>
 
   <!-- ========== 4 · bullets ========== -->
   <section class="slide bullets">
-    <div class="slide-inner">
-      <div class="kicker">Three failures</div>
-      <h2 class="h2" style="margin-top:16px;">没想清楚受众的三个信号</h2>
-      <div class="body">
-        <div class="item"><div class="dot"></div><div>
-          <div class="h3">标题写成分类名</div>
-          <p>「市场分析」「产品规划」是目录，不是观点。观众看完标题不知道你要说什么。</p>
-        </div></div>
-        <div class="item"><div class="dot"></div><div>
-          <div class="h3">每页塞三件事</div>
-          <p>一页三个主题，观众一个都记不住。要么拆成三页，要么只留最强的那一个。</p>
-        </div></div>
-        <div class="item"><div class="dot"></div><div>
-          <div class="h3">数字没有出处</div>
-          <p>「提升了 300%」——相比什么？什么时候？谁的样本？没有锚点的数字等于没讲。</p>
-        </div></div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">04</span><span class="dash"></span><span class="en">Three Failures</span></div>
+    <h2 class="title">没想清楚受众的三个信号</h2>
+    <div class="list">
+      <div class="item">
+        <div class="mk"></div>
+        <div>
+          <div class="h">标题写成分类名</div>
+          <p>「市场分析」「产品规划」是目录，不是观点。观众看完标题不知道你要说什么，就只能等你开口。</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="mk"></div>
+        <div>
+          <div class="h">每页塞三件事</div>
+          <p>一页三个主题，一个都记不住。要么拆成三页，要么只留最强的那一个，其余写进讲稿。</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="mk"></div>
+        <div>
+          <div class="h">数字没有锚点</div>
+          <p>「提升了 300%」——相比什么？什么时候？谁的样本？没有锚点的数字，等于没讲。</p>
+        </div>
       </div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>04</span></div>
+    <div class="rail"></div>
+    <div class="note">这三个信号出现任何一个，稿子就该重写，不是润色。</div>
+    <div class="pageno">04</div>
   </section>
 
   <!-- ========== 5 · columns ========== -->
   <section class="slide columns">
-    <div class="slide-inner">
-      <div class="kicker">Rewrite</div>
-      <h2 class="h2" style="margin-top:16px;">把分类名改成观点</h2>
-      <div class="cols">
-        <div class="col">
-          <h4>改之前</h4>
-          <ul>
-            <li>市场分析</li>
-            <li>产品规划</li>
-            <li>竞争格局</li>
-            <li>下一步计划</li>
-          </ul>
-        </div>
-        <div class="col">
-          <h4>改之后</h4>
-          <ul>
-            <li>市场在向中端价格带集中</li>
-            <li>我们只做一件事，但要做到最狠</li>
-            <li>三个对手都在补同一块短板</li>
-            <li>下季度押注单一渠道</li>
-          </ul>
-        </div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">05</span><span class="dash"></span><span class="en">Rewrite</span></div>
+    <h2 class="title">把分类名改成观点 <small>/ 左边是目录，右边是判断</small></h2>
+    <div class="cols">
+      <div class="col">
+        <div class="h4">Before</div>
+        <ul>
+          <li>市场分析</li>
+          <li>产品规划</li>
+          <li>竞争格局</li>
+          <li>下一步计划</li>
+        </ul>
+      </div>
+      <div class="mid divider-v"></div>
+      <div class="col">
+        <div class="h4">After</div>
+        <ul>
+          <li>市场在向中端价格带集中</li>
+          <li>我们只做一件事，但要做到最狠</li>
+          <li>三个对手都在补同一块短板</li>
+          <li>下季度押注单一渠道</li>
+        </ul>
       </div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>05</span></div>
+    <div class="pageno">05</div>
   </section>
 
   <!-- ========== 6 · cards ========== -->
   <section class="slide cards" data-n="3">
-    <div class="glow" style="width:560px;height:560px;left:50%;bottom:-360px;transform:translateX(-50%);"></div>
-    <div class="slide-inner">
-      <div class="kicker">Skeleton</div>
-      <h2 class="h2" style="margin-top:16px;">三种页面骨架覆盖九成场景</h2>
-      <div class="grid">
-        <div class="c"><div class="ico">◧</div><div class="h3">主张页</div><p>一句话结论 + 三到四个支撑点。用于论证、说服、汇报核心结论。</p></div>
-        <div class="c"><div class="ico">▤</div><div class="h3">数据页</div><p>一个大数字或一组条形。用于证明规模、增速、占比、差距。</p></div>
-        <div class="c"><div class="ico">◈</div><div class="h3">结构页</div><p>流程、时间线、矩阵、分层。用于解释「怎么发生」而不是「是什么」。</p></div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">06</span><span class="dash"></span><span class="en">Skeleton</span></div>
+    <h2 class="title">三种页面骨架覆盖九成场景</h2>
+    <div class="grid">
+      <div class="c">
+        <div class="ico">◧</div>
+        <div class="h">主张页</div>
+        <p>一句话结论 + 三到四个支撑点。用在论证、说服、汇报核心结论的地方。</p>
+      </div>
+      <div class="c">
+        <div class="ico">▤</div>
+        <div class="h">数据页</div>
+        <p>一个大数字或一组条形。用在证明规模、增速、占比、差距的地方。</p>
+      </div>
+      <div class="c">
+        <div class="ico">◈</div>
+        <div class="h">结构页</div>
+        <p>流程、时间线、矩阵、分层。用在解释「怎么发生」而不是「是什么」的地方。</p>
       </div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>06</span></div>
+    <div class="corner"><div><div class="n">DECK</div><div class="t">03 SKELETONS</div></div></div>
+    <div class="pageno">06</div>
   </section>
 
   <!-- ========== 7 · stat ========== -->
-  <section class="slide stat" data-n="3">
-    <div class="slide-inner">
-      <div class="kicker">Density</div>
-      <h2 class="h2" style="margin-top:16px;">一页的字数上限</h2>
-      <div class="row">
-        <div class="s"><div class="v num">1<em>个观点</em></div><div class="k">一页只允许一个观点。多一个，观众就要做一次选择。</div></div>
-        <div class="s"><div class="v num">3<em>条支撑</em></div><div class="k">支撑点超过四条，说明你还没想清楚哪个最重要。</div></div>
-        <div class="s"><div class="v num">40<em>字正文</em></div><div class="k">正文超过四十字，就已经是该放进讲稿而不是页面里的内容。</div></div>
+  <section class="slide stat">
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">07</span><span class="dash"></span><span class="en">Density</span></div>
+    <h2 class="title">一页的字数上限 <small>/ 超过就是该拆页</small></h2>
+    <div class="dots">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="banner">
+      <div class="bg"></div>
+      <div class="mask"></div>
+      <div class="inner">
+        <div class="kick"><i></i><span>KEY INSIGHT · DENSITY</span></div>
+        <div class="big">一页只讲一件<span class="hl">事.</span></div>
+        <div class="note">文字越多，观众读得越多，听得越少。演示稿不是文档——详细内容写进讲稿。</div>
+      </div>
+      <div class="ghost">01</div>
+      <div class="pill">单页总字数 ≤ 120 字</div>
+    </div>
+    <div class="kpis">
+      <div class="k">
+        <div class="en">One Idea</div>
+        <div class="cn">一个观点</div>
+        <div class="v"><b>1</b><i>个</i></div>
+        <div class="delta">多一个，观众就要做一次选择</div>
+      </div>
+      <div class="divider-v" style="height:230px;"></div>
+      <div class="k">
+        <div class="en">Support</div>
+        <div class="cn">支撑点</div>
+        <div class="v"><b>3</b><i>条</i></div>
+        <div class="delta">超过四条，说明还没想清哪个最重要</div>
+      </div>
+      <div class="divider-v" style="height:230px;"></div>
+      <div class="k">
+        <div class="en">Body Text</div>
+        <div class="cn">正文上限</div>
+        <div class="v"><b>40</b><i>字</i></div>
+        <div class="delta">超过就该进讲稿，不该留在页面上</div>
+      </div>
+      <div class="divider-v" style="height:230px;"></div>
+      <div class="k">
+        <div class="en">Total</div>
+        <div class="cn">整页字数</div>
+        <div class="v"><b>120</b><i>字</i></div>
+        <div class="delta">缩小到手机大小还能读，才算合格</div>
       </div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>07</span></div>
+    <div class="prog">
+      <div class="head">
+        <div class="l">页面密度安全线</div>
+        <div class="r">当前 &nbsp;<span style="font-size:28px;">68%</span>&nbsp; / 还剩 32% 余量</div>
+      </div>
+      <div class="bar"><div class="fill"></div><div class="mk"></div></div>
+      <div class="ticks"><span>0</span><span>25%</span><span>50%</span><span style="color:var(--accent-2);font-weight:800;">68%</span><span>75%</span><span>100%</span></div>
+    </div>
+    <div class="source">数据来源：deck-craft 写作规范 v2</div>
+    <div class="pageno">07</div>
   </section>
 
   <!-- ========== 8 · chart ========== -->
   <section class="slide chart">
-    <div class="slide-inner">
-      <div class="kicker">Evidence</div>
-      <h2 class="h2" style="margin-top:16px;">观众记住的是形状，不是数字</h2>
-      <div class="wrap">
-        <div class="bars">
-          <div class="bar alt"><b>18</b><i style="height:16%"></i><span>文字页</span></div>
-          <div class="bar alt"><b>31</b><i style="height:29%"></i><span>文字+图</span></div>
-          <div class="bar"><b>74</b><i style="height:72%"></i><span>单一图表</span></div>
-          <div class="bar"><b>96</b><i style="height:94%"></i><span>图表+一句结论</span></div>
-        </div>
-        <div class="legend">
-          <div class="lg"><i></i><p>柱状图只回答一个问题：谁比谁高。</p></div>
-          <div class="lg"><i style="background:var(--muted)"></i><p>图例不要超过三项。超过三项就应该拆页。</p></div>
-          <div class="lg"><i style="background:var(--muted)"></i><p>图表必须有标题句，而不是「图 1」。</p></div>
-          <div class="lg"><i style="background:var(--line)"></i><p>示意数据，仅用于说明形状差异。</p></div>
-        </div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">08</span><span class="dash"></span><span class="en">Evidence</span></div>
+    <h2 class="title">观众记住的是形状，不是数字</h2>
+    <div class="wrap">
+      <div class="plot">
+        <div class="bar alt"><b>18</b><i style="height:18%"></i><span>纯文字页</span></div>
+        <div class="bar alt"><b>31</b><i style="height:31%"></i><span>文字+图</span></div>
+        <div class="bar"><b>74</b><i style="height:74%"></i><span>单一图表</span></div>
+        <div class="bar"><b>96</b><i style="height:96%"></i><span>图表+结论</span></div>
+      </div>
+      <div class="legend">
+        <div class="lg"><i></i><p>柱状图只回答一个问题：谁比谁高。</p></div>
+        <div class="lg"><i style="background:var(--muted)"></i><p>图例不要超过三项。超过三项就该拆页。</p></div>
+        <div class="lg"><i style="background:var(--muted)"></i><p>图表必须有标题句，而不是「图 1」。</p></div>
+        <div class="lg"><i style="background:var(--line)"></i><p>示意数据，仅用于说明形状差异。</p></div>
       </div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>08</span></div>
+    <div class="source">示意数据 · 仅说明版式差异</div>
+    <div class="pageno">08</div>
   </section>
 
   <!-- ========== 9 · timeline ========== -->
   <section class="slide timeline">
-    <div class="slide-inner">
-      <div class="kicker">Pipeline</div>
-      <h2 class="h2" style="margin-top:16px;">一份稿子的生成顺序</h2>
-      <div class="track">
-        <div class="node"><div class="t">STEP 1</div><div class="h3">问清需求</div><p>主题、受众、页数、场景。缺一个就问。</p></div>
-        <div class="node"><div class="t">STEP 2</div><div class="h3">交出大纲</div><p>每页一行标题。等确认，不抢跑。</p></div>
-        <div class="node"><div class="t">STEP 3</div><div class="h3">选主题</div><p>按行业和场合定色，不按喜好。</p></div>
-        <div class="node"><div class="t">STEP 4</div><div class="h3">逐页写</div><p>一页一写，写完即验。</p></div>
-        <div class="node"><div class="t">STEP 5</div><div class="h3">自检交付</div><p>溢出、对比度、页数、口径。</p></div>
-      </div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">09</span><span class="dash"></span><span class="en">Pipeline</span></div>
+    <h2 class="title">一份稿子的生成顺序</h2>
+    <div class="track">
+      <div class="node"><div class="t">STEP 01</div><div class="h">问清需求</div><p>主题、受众、页数、场合。缺哪个就问，一次问完。</p></div>
+      <div class="node"><div class="t">STEP 02</div><div class="h">交出大纲</div><p>每页一行观点句。等确认，不抢跑。</p></div>
+      <div class="node"><div class="t">STEP 03</div><div class="h">定主题色</div><p>按行业和场合选，不按个人喜好。</p></div>
+      <div class="node"><div class="t">STEP 04</div><div class="h">逐页写</div><p>一页一写，写完即验，不攒到最后。</p></div>
+      <div class="node"><div class="t">STEP 05</div><div class="h">自检交付</div><p>溢出、对比度、口径、页码。过不了就改。</p></div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>09</span></div>
+    <div class="pageno">09</div>
   </section>
 
   <!-- ========== 10 · quote ========== -->
   <section class="slide quote">
-    <div class="glow" style="width:700px;height:700px;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
-    <div class="slide-inner">
-      <blockquote>如果你不能用一句话说清这页要讲什么，那这页就不该存在。</blockquote>
-      <cite>Barbara Minto · 金字塔原理</cite>
-    </div>
-    <div class="slide-foot"><span>deck-craft</span><span>10</span></div>
+    <div class="mark">“</div>
+    <blockquote>如果你不能用一句话说清这页要讲什么，那这页就不该存在。</blockquote>
+    <div class="rule"></div>
+    <cite>Barbara Minto · The Minto Pyramid Principle</cite>
+    <div class="pageno">10</div>
   </section>
 
   <!-- ========== 11 · table ========== -->
   <section class="slide table">
-    <div class="slide-inner">
-      <div class="kicker">Reference</div>
-      <h2 class="h2" style="margin-top:16px;">版式速查</h2>
-      <table>
-        <thead><tr><th>你手上的内容</th><th>用这个版式</th><th>页数占比</th></tr></thead>
-        <tbody>
-          <tr><td>一个结论 + 三个理由</td><td>bullets 要点</td><td class="num">30%</td></tr>
-          <tr><td>两方对照、前后对比</td><td>columns 双栏</td><td class="num">15%</td></tr>
-          <tr><td>并列的模块或能力</td><td>cards 卡片</td><td class="num">15%</td></tr>
-          <tr><td>规模、增速、占比</td><td>stat 数据 / chart 图表</td><td class="num">20%</td></tr>
-          <tr><td>阶段、演化、排期</td><td>timeline 时间线</td><td class="num">10%</td></tr>
-          <tr><td>步骤、链路、分工</td><td>process 流程</td><td class="num">10%</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="slide-foot"><span>deck-craft</span><span>11</span></div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">11</span><span class="dash"></span><span class="en">Reference</span></div>
+    <h2 class="title">版式速查 <small>/ 按内容形状选，不按好看选</small></h2>
+    <table>
+      <thead><tr><th>你手上的内容</th><th>用这个版式</th><th>页数占比</th></tr></thead>
+      <tbody>
+        <tr><td>一个结论 + 三条理由</td><td>bullets 要点</td><td class="num">30%</td></tr>
+        <tr><td>两方对照、前后对比</td><td>columns 双栏</td><td class="num">15%</td></tr>
+        <tr><td>并列的模块或能力</td><td>cards 卡片</td><td class="num">15%</td></tr>
+        <tr><td>规模、增速、占比</td><td>stat / chart</td><td class="num">20%</td></tr>
+        <tr><td>阶段、演化、排期</td><td>timeline 时间线</td><td class="num">10%</td></tr>
+        <tr><td>步骤、链路、分工</td><td>process 流程</td><td class="num">10%</td></tr>
+      </tbody>
+    </table>
+    <div class="pageno">11</div>
   </section>
 
   <!-- ========== 12 · image ========== -->
   <section class="slide image">
-    <div class="slide-inner">
-      <div class="kicker">Visual</div>
-      <h2 class="h2" style="margin-top:16px;">图不是装饰，是证据</h2>
-      <div class="split">
-        <div class="frame">把截图 / 照片 / 示意图放这里</div>
-        <div class="side">
-          <div class="item"><div class="h3">图必须自己会说话</div><p>去掉文字后，图还能传达信息，才值得占半页。</p></div>
-          <div class="item"><div class="h3">别用图填空</div><p>找不到合适的图，就用留白。留白比库存图高级。</p></div>
-          <div class="item"><div class="h3">统一处理</div><p>整份稿子的图用同一种圆角、同一种边框粗细。</p></div>
-        </div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">12</span><span class="dash"></span><span class="en">Visual</span></div>
+    <h2 class="title">图不是装饰，是证据</h2>
+    <div class="split">
+      <div class="frame"><div class="ph">把截图 / 照片 / 示意图放这里</div></div>
+      <div class="side">
+        <div class="item"><div class="h">图必须自己会说话</div><p>去掉文字后，图还能传达信息，才值得占半页。</p></div>
+        <div class="item"><div class="h">别用图填空</div><p>找不到合适的图，就用留白。留白比库存图高级。</p></div>
+        <div class="item"><div class="h">统一处理</div><p>整份稿子的图用同一种圆角、同一种边框粗细。</p></div>
       </div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>12</span></div>
+    <div class="pageno">12</div>
   </section>
 
   <!-- ========== 13 · process ========== -->
   <section class="slide process">
-    <div class="slide-inner">
-      <div class="kicker">Workflow</div>
-      <h2 class="h2" style="margin-top:16px;">四步做完整份稿</h2>
-      <div class="flow">
-        <div class="step"><div class="n">01</div><div class="h3">定骨架</div><p>按版式占比排页序，先排结构再填内容。</p></div>
-        <div class="step"><div class="n">02</div><div class="h3">写标题</div><p>每一页一行观点句，读一遍像不像故事。</p></div>
-        <div class="step"><div class="n">03</div><div class="h3">填支撑</div><p>每条支撑控制在一句话，能用数字就用数字。</p></div>
-        <div class="step"><div class="n">04</div><div class="h3">验三道</div><p>溢出、对比度、口径。过不了就改。</p></div>
-      </div>
+    <div class="topbar"><div class="a"></div><div class="b"></div></div>
+    <div class="eyebrow"><span class="no">13</span><span class="dash"></span><span class="en">Workflow</span></div>
+    <h2 class="title">四步做完整份稿</h2>
+    <div class="flow">
+      <div class="step"><div class="n">STEP 01</div><div class="h">定骨架</div><p>按版式占比排页序，先排结构，再填内容。</p></div>
+      <div class="step"><div class="n">STEP 02</div><div class="h">写标题</div><p>每页一行观点句，连起来读一遍，像不像一段话。</p></div>
+      <div class="step"><div class="n">STEP 03</div><div class="h">填支撑</div><p>每条支撑一句话，能用数字就用数字，且必须给锚点。</p></div>
+      <div class="step"><div class="n">STEP 04</div><div class="h">验三道</div><p>溢出、对比度、口径。过不了就改，改完再验。</p></div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>13</span></div>
+    <div class="pageno">13</div>
   </section>
 
   <!-- ========== 14 · end ========== -->
   <section class="slide end">
-    <div class="glow" style="width:640px;height:640px;right:-200px;bottom:-280px;"></div>
-    <div class="slide-inner">
-      <div class="kicker">Start</div>
-      <h1 class="h1" style="margin-top:20px;">现在，说你要做什么稿子</h1>
-      <p class="lead">告诉我四件事：讲给谁听、要多少页、什么场合、有没有现成材料。</p>
-      <div class="actions">
-        <div class="btn primary">主题 + 受众 + 页数</div>
-        <div class="btn ghost">先给我大纲</div>
-      </div>
+    <div class="slice"></div>
+    <div class="rule"></div>
+    <h1>现在，说你要做什么稿子</h1>
+    <p class="lead">告诉我四件事：讲给谁听、要多少页、什么场合、有没有现成材料。</p>
+    <div class="actions">
+      <div class="btn primary">主题 + 受众 + 页数</div>
+      <div class="btn ghost">先给我大纲</div>
     </div>
-    <div class="slide-foot"><span>deck-craft</span><span>14 / 14</span></div>
+    <div class="pageno">14 / 14</div>
   </section>
 
 </div>
@@ -995,7 +907,7 @@ body.playing .progress { opacity: .8; }
   if (i < 0) i = 0;
 
   function fit() {
-    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
     deck.style.transform = 'scale(' + s + ')';
   }
 

@@ -57,7 +57,9 @@ html = html
   .replaceAll('{{TITLE}}', title)
   .replaceAll('{{EYEBROW}}', args.eyebrow)
   .replaceAll('{{H1}}', title)
-  .replaceAll('{{LEAD}}', '副标题：一句话说清这份稿子要给谁解决什么问题。')
+  .replaceAll('{{LEAD}}', '一句话说清这份稿子要给谁解决什么问题')
+  .replaceAll('{{SUBEN}}', 'SUBTITLE IN ENGLISH')
+  .replaceAll('{{DESC}}', 'Two lines of context. Who this is for,<br>and what decision it should drive.')
   .replaceAll('{{DATE}}', today)
   .replaceAll('{{PAGES}}', '1')
   .replaceAll('{{BRAND}}', brand);

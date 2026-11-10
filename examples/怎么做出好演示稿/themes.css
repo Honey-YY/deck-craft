@@ -4,10 +4,10 @@
    ========================================================================== */
 
 :root {
-  /* 版式基准：所有坐标按 1280 × 720 写死，靠外层 scale 适配窗口 */
-  --w: 1280px;
-  --h: 720px;
-  --pad: 72px;
+  /* 版式基准：所有坐标按 1920 × 1080 写死，靠外层 scale 适配窗口 */
+  --w: 1920px;
+  --h: 1080px;
+  --pad: 96px;
 
   /* 字族 */
   --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;

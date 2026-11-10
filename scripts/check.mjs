@@ -86,8 +86,8 @@ slides.forEach((s, idx) => {
   if (s.cls.includes('on')) onCount++;
 
   // 页码
-  const footM = s.body.match(/<div class="slide-foot">([\s\S]*?)<\/div>/);
-  if (!footM) warn(`${tag}（${s.layout}）：缺 slide-foot 页脚`);
+  const footM = s.body.match(/<div class="(?:slide-foot|pageno)"[^>]*>([\s\S]*?)<\/div>/);
+  if (!footM) warn(`${tag}（${s.layout}）：缺页码（pageno / slide-foot）`);
   else if (!/\d/.test(strip(footM[1]))) warn(`${tag}（${s.layout}）：页脚里没有页码`);
 
   // 标题
@@ -104,9 +104,8 @@ slides.forEach((s, idx) => {
     }
   }
 
-  // data-n
+  // data-n：cards 必须给；stat 可选（新版用 flex 自适应列数）
   if (s.layout === 'cards' && !/data-n="(3|4|6)"/.test(s.raw)) err(`${tag}：cards 需要 data-n="3|4|6"`);
-  if (s.layout === 'stat' && !/data-n="(1|2|3)"/.test(s.raw)) err(`${tag}：stat 需要 data-n="1|2|3"`);
 
   // 卡片数量与 data-n 是否一致
   if (s.layout === 'cards') {
@@ -165,7 +164,7 @@ for (const dep of ['themes.css', 'layouts.css', 'player.js']) {
 }
 
 // 页脚总页码与真实页数
-const lastFoot = slides[n - 1]?.body.match(/<div class="slide-foot">([\s\S]*?)<\/div>/);
+const lastFoot = slides[n - 1]?.body.match(/<div class="(?:slide-foot|pageno)"[^>]*>([\s\S]*?)<\/div>/);
 if (lastFoot) {
   const nums = strip(lastFoot[1]).match(/(\d+)\s*\/\s*(\d+)/);
   if (nums && Number(nums[2]) !== n) warn(`最后一页写的是 ${nums[1]}/${nums[2]}，实际 ${n} 页`);

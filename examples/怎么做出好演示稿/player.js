@@ -14,7 +14,7 @@
   if (i < 0) i = 0;
 
   function fit() {
-    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
     deck.style.transform = 'scale(' + s + ')';
   }
 
