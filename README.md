@@ -2,6 +2,8 @@
 
 给 AI Agent 用的 PPT 制作技能。说一句话，得到一份能直接上台放的演示稿。
 
+**[→ 在线看效果](https://honey-yy.github.io/deck-craft/)**（14 页，方向键翻页，F 全屏）
+
 产物是**单个 HTML 文件**：双击就放，方向键翻页，F 全屏，Ctrl+P 出 PDF。没有服务器、没有账号、没有 API Key、没有 `npm install`。
 
 ```
